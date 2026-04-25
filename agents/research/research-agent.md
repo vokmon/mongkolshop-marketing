@@ -9,7 +9,7 @@
 - `topic` หรือ `theme` ที่ต้องการ (optional — ถ้าไม่มีให้หาเอง)
 
 ## อ่านก่อนเริ่ม
-1. `products/[product_id].md` — product brief, target audience, hashtags
+1. `products/[product_id]/brief.md` — product brief, target audience, hashtags
 2. `skills/mongkolart-brand.md` — brand voice และ content themes
 
 ## Process

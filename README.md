@@ -19,7 +19,7 @@ Goal: drive sales to the LINE OA channel through automated content creation, ima
 
 | product_id | ชื่อ | ราคา | ช่องทาง | Brief |
 |---|---|---|---|---|
-| `mongkol_art` | รูปมงคล | 159 THB | LINE OA `@652hgnwz` | `products/mongkol_art.md` |
+| `mongkol_art` | รูปมงคล | 159 THB | LINE OA `@652hgnwz` | `products/mongkol_art/brief.md` |
 
 ---
 
