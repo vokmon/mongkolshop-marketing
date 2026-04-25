@@ -14,17 +14,17 @@
 4. `skills/mongkolart-brand.md` — brand voice
 
 ## Process
-1. เรียก tracker-agent `getRecentFormats(product_id, 5)` เพื่อดู format ที่ใช้ล่าสุด
+1. เรียก tracker-agent `scan({ fields: ['content_format', 'visual_style'], limit: 5 })` เพื่อดู format และ visual style ที่ใช้ล่าสุด
 2. เลือก `content_format` ให้หลากหลาย — หลีกเลี่ยง format เดิมที่ใช้ติดต่อกัน:
    - **image** — angle ที่เป็น single powerful visual (เทพองค์เดียว, สัญลักษณ์มงคล)
    - **video** — angle ที่เป็นเรื่องราว (before/after, journey, สาธิต)
    - **carousel** — angle ที่มีหลายข้อมูล (เทพหลายองค์, เปรียบเทียบ, list)
 3. สร้าง script และ hook ตาม format ที่เลือก
-4. เลือก `visual_style` ให้ต่างจาก rows ล่าสุดใน database (deity, color palette, composition)
+4. เลือก `visual_style` ให้ต่างจากที่ใช้ล่าสุด (deity, color palette, composition)
 5. สร้าง scene_prompts (สำหรับ video/carousel) ไม่มีตัวอักษรในรูป
 6. เลือกจำนวน hashtags ให้หลากหลาย (3-8 อัน) — ไม่ใช้จำนวนเดิมทุกครั้ง
 7. บันทึก script file ลง `outputs/scripts/[idea_id].json`
-8. เรียก tracker-agent `createContent` พร้อม `content_format` และ `visual_style`
+8. เรียก tracker-agent `saveContent()` พร้อม content ที่สร้าง
 
 ## Content Format Guide
 | Format | Caption length | Hashtags | Script structure |

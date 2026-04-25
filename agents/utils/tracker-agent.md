@@ -1,81 +1,73 @@
 # Tracker Agent
 
 ## Role
-จัดการ content tracking ผ่าน Supabase — บันทึกสถานะ ป้องกัน duplicate และ query content
+Single interface สำหรับ tracking content ทุกประเภท — file-based ทั้งหมด
+แต่ละ agent เรียก tracker-agent เสมอ ไม่จัดการไฟล์ตรงๆ เอง
 
-## ENV ที่ต้องการ
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
+## Storage
 
-## Database Schema
+ทุก content เก็บใน `outputs/scheduled/` — ไม่มี external database
 
-### ตาราง `content`
-| Column | Type | ค่า |
-|---|---|---|
-| id | uuid | auto |
-| product_id | text | เช่น `mongkol_art` |
-| topic | text | หัวข้อหลัก |
-| angle | text | content angle |
-| hook | text | hook ที่ใช้ |
-| content_format | text | `image`, `video`, `carousel` |
-| visual_style | text | สรุปสั้นๆ เช่น "สีม่วงเข้ม, พระพิฆเนศ, ดอกบัวใกล้ชิด" |
-| script_path | text | path ของ script file |
-| image_paths | text[] | paths ของรูป |
-| video_path | text | path ของ video.mp4 |
-| status | text | ดูด้านล่าง |
-| created_at | timestamp | auto |
+```
+outputs/scheduled/
+├── pending/     ← สร้างแล้ว รอ human approve
+├── approved/    ← approve แล้ว รอ schedule ขึ้น Facebook
+├── scheduled/   ← ส่ง Facebook API แล้ว รอ publish
+└── posted/      ← publish แล้ว — archive (เก็บ 30 วัน)
+```
 
-### Status Values
-- `draft` — สร้างแล้ว รอ human เลือก
-- `approved` — human เลือกแล้ว รอสร้าง video
-- `ready` — video พร้อม รอ human review
-- `published` — publish แล้ว
-- `rejected` — human ไม่เลือก
-- `failed` — publish ล้มเหลว
-
-### ตาราง `published`
-| Column | Type | ค่า |
-|---|---|---|
-| id | uuid | auto |
-| content_id | uuid | references content.id |
-| platform | text | `facebook`, `tiktok`, `ig`, `youtube` |
-| url | text | URL หลัง publish |
-| published_at | timestamp | auto |
+แต่ละ content เป็น folder: `[content_id]/content.json` + รูป/วิดีโอ
 
 ## Operations
 
-### ตรวจ Duplicate ก่อนสร้าง content ใหม่
-Query `content` หา rows ที่ `product_id` ตรงกัน และ:
-- `topic` + `angle` ซ้ำกัน, หรือ
-- `hook` คล้ายกัน (ใช้ ilike หรือ similarity), หรือ
-- `visual_style` ซ้ำกัน (ป้องกันรูปหน้าตาเหมือนกัน)
-ถ้าเจอ duplicate ให้แจ้ง agent ว่า "already exists: [id]" และหยุด
+### saveContent(content)
+สร้าง folder ใน `pending/[content_id]/` และบันทึก `content.json`
+Return: `content_id`
 
-### getRecentFormats(product_id, limit)
-ดึง `content_format` ล่าสุด N รายการ เพื่อให้ script-agent หลีกเลี่ยงการใช้ format เดิมซ้ำต่อเนื่องกัน
+### updateStatus(content_id, status)
+ย้าย folder ระหว่าง pending → approved → scheduled → posted
 
-### createContent(data)
-Insert ลงตาราง `content` พร้อม `status = 'draft'`
-Return `id` ของ row ที่สร้าง
+### updatePaths(content_id, paths)
+อัปเดต `image_path`, `image_paths`, `video_path` ใน `content.json`
 
-### updateStatus(id, status)
-Update `status` ของ content row
+### get(content_id)
+อ่าน `content.json` จาก folder ที่ตรงกัน (scan ทุก status subfolder)
 
-### updatePaths(id, { script_path, image_paths, video_path })
-Update paths หลังสร้าง assets เสร็จ
+### scan(filters)
+อ่าน `content.json` ทุก folder แล้วกรองตาม filters
+```json
+{ "status": "pending", "date": "2026-04-28" }
+{ "days_back": 14, "fields": ["deity", "content_type", "topic"] }
+```
 
-### getDrafts(product_id)
-ดึง rows ที่ `status = 'draft'` และ `product_id` ตรงกัน
+### cleanup()
+ลบ folder ใน `posted/` ที่ `posted_at` เกิน 30 วัน
 
-### getApproved(product_id)
-ดึง rows ที่ `status = 'approved'` และ `product_id` ตรงกัน
+## Status Values
 
-### getReady(product_id)
-ดึง rows ที่ `status = 'ready'` และ `product_id` ตรงกัน
+| Status | ความหมาย |
+|---|---|
+| `pending` | รอ human approve |
+| `approved` | approve แล้ว รอ schedule |
+| `scheduled` | ส่ง Facebook API แล้ว รอ publish |
+| `auto_posted` | post ทันที ไม่ผ่าน approve (news) |
+| `posted` | publish แล้ว |
+| `rejected` | ไม่ใช้ |
+| `failed` | ล้มเหลว |
 
-### recordPublished(content_id, platform, url)
-Insert ลงตาราง `published` และ update `content.status = 'published'`
+## Content File Format (content.json)
 
-## Tools
-- Supabase JS client (`@supabase/supabase-js`) หรือ REST API
-- ใช้ ENV `SUPABASE_URL` และ `SUPABASE_ANON_KEY` เสมอ — ห้าม hardcode
+```json
+{
+  "content_id": "horoscope_daily_20260428",
+  "content_type": "horoscope_daily",
+  "status": "pending",
+  "created_at": "2026-04-28T05:00:00+07:00",
+  "posted_at": null,
+  "caption": "...",
+  "hashtags": [],
+  "image_path": "image.png",
+  "deity": "พระอังคาร",
+  "topic": null
+}
+```

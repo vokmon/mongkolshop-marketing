@@ -17,7 +17,7 @@
    ```
 3. Generate scene ถัดไปตาม product instructions — ส่ง reference images ตามที่ product กำหนด
 4. ตรวจว่าไฟล์ถูกสร้างครบทุก scene
-5. เรียก tracker-agent `updatePaths` เพื่ออัพเดท `image_paths` ใน database
+5. เรียก tracker-agent `updatePaths(idea_id, { image_paths })` — tracker-agent จัดการว่าจะบันทึกลงที่ไหน
 
 ## Output
 ```json

@@ -1,54 +1,71 @@
 # Facebook Agent
 
 ## Role
-Adapt content และ publish ลง Facebook Page ผ่าน Meta Graph API
-
-## Input
-- `content_id` — ดึง content จาก tracker-agent
-- `product_id`
-- `post_type` — `image`, `video`, หรือ `carousel` (อ่านจาก content.content_format)
+รับ approved content จาก post-agent แล้ว schedule ขึ้น Facebook Page ผ่าน Graph API
+Facebook จะ publish เองอัตโนมัติตามเวลาที่กำหนด — ไม่ต้องมีคนกด publish
 
 ## ENV ที่ต้องการ
-- `META_ACCESS_TOKEN`
+- `META_ACCESS_TOKEN` — Page Access Token (long-lived ~60 วัน)
 - `FB_PAGE_ID`
 
-## อ่านก่อนเริ่ม
-1. `products/[product_id].md` — CTA และ hashtags
-2. `skills/platform-specs.md` — Facebook format limits
+## Input
+```json
+{
+  "content_id": "...",
+  "pipeline": "editorial",
+  "format": "image",
+  "caption": "...",
+  "hashtags": [],
+  "image_path": "outputs/scheduled/approved/.../image.png",
+  "scheduled_publish_time": 1746342000
+}
+```
+
+`scheduled_publish_time` — Unix timestamp ของเวลาที่ต้องการโพส (กำหนดโดย post-agent)
+ต้องอยู่ระหว่าง **10 นาที ถึง 75 วัน** ในอนาคต
 
 ## Process
 
 ### Image Post
-1. ดึง `thumbnail.png` หรือ `scene_01.png` จาก content
-2. ดึง caption + hashtags จาก script
-3. เพิ่ม CTA จาก product brief ต่อท้าย caption
-4. POST ไปที่ `graph.facebook.com/v19.0/[FB_PAGE_ID]/photos`
-5. เรียก tracker-agent `recordPublished(content_id, 'facebook', url)`
+1. Upload รูปไปที่ Graph API (unpublished)
+2. Schedule post:
+```
+POST /{FB_PAGE_ID}/photos
+{
+  "published": false,
+  "scheduled_publish_time": [unix_timestamp],
+  "message": "[caption]\n[hashtags]",
+  "url": "[image_url]"
+}
+```
+3. เรียก tracker-agent `updateStatus(content_id, 'scheduled')` พร้อม `fb_post_id`
 
-### Video / Reel Post
-1. ดึง `outputs/videos/[idea_id].mp4`
-2. ดึง caption + hashtags จาก script
-3. เพิ่ม CTA จาก product brief ต่อท้าย caption
-4. Upload video ไปที่ `graph.facebook.com/v19.0/[FB_PAGE_ID]/videos`
-5. เรียก tracker-agent `recordPublished(content_id, 'facebook', url)`
+### Video Post
+1. Upload video ผ่าน resumable upload API ก่อน (ได้ `video_id`)
+2. Schedule post:
+```
+POST /{FB_PAGE_ID}/videos
+{
+  "published": false,
+  "scheduled_publish_time": [unix_timestamp],
+  "description": "[caption]\n[hashtags]",
+  "video_id": "[video_id]"
+}
+```
+3. เรียก tracker-agent `updateStatus(content_id, 'scheduled')` พร้อม `fb_post_id`
 
-### Carousel Post
-1. ดึง `image_paths[]` จาก content (2-3 รูป)
-2. สร้าง caption พร้อม per-slide context จาก script
-3. POST ผ่าน multi-photo endpoint หรือ scheduled carousel
-4. เรียก tracker-agent `recordPublished(content_id, 'facebook', url)`
-
-## Posting Time Randomization
-- อย่า post เวลาเดิมทุกครั้ง — Facebook จะตรวจจับ pattern
-- สุ่มเวลาในช่วง: **7:00–9:00**, **11:30–13:00**, **18:00–21:00**
-- ห่างจาก post ก่อนหน้าอย่างน้อย 18 ชั่วโมง
-- ใช้ `scheduled_publish_time` ใน Graph API เพื่อตั้งเวลาล่วงหน้า
+### Immediate Post (news, festival วันนี้)
+เหมือนกันทุกอย่าง แต่ใช้ `"published": true` และไม่ต้องใส่ `scheduled_publish_time`
 
 ## Error Handling
-- ถ้า API fail ให้ retry 1 ครั้งหลังรอ 30 วิ
-- ถ้า retry fail ให้เรียก tracker-agent `updateStatus(id, 'failed')` และแจ้ง user
+- ถ้า API fail → retry 1 ครั้งหลังรอ 30 วิ
+- ถ้า retry fail → เรียก tracker-agent `updateStatus(content_id, 'failed')` และแจ้ง user
+
+## Status หลัง Schedule สำเร็จ
+`scheduled` — post อยู่ใน Facebook queue รอ publish ตามเวลา
+ดู/แก้ไข scheduled posts ได้ที่ Meta Business Suite
 
 ## API Reference
-- Photos: `POST /[PAGE_ID]/photos`
-- Videos: `POST /[PAGE_ID]/videos`
-- Docs: developers.facebook.com/docs/graph-api/reference/page/photos
+- Photos: `POST /{page-id}/photos`
+- Videos: `POST /{page-id}/videos`
+- Resumable upload: `POST /{page-id}/videos` (chunked)

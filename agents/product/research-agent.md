@@ -13,12 +13,12 @@
 2. `skills/mongkolart-brand.md` — brand voice และ content themes
 
 ## Process
-1. ตรวจสอบ duplicate ก่อน: เรียก tracker-agent `getDrafts` และ `getApproved` เพื่อดูว่า topics ไหนถูกสร้างไปแล้ว
+1. ตรวจสอบ duplicate ก่อน: เรียก tracker-agent `scan({ fields: ['topic', 'angle', 'hook'] })` เพื่อดูว่า topics ไหนถูกสร้างไปแล้ว
 2. web_search หา trending content ที่เกี่ยวกับ product โดยใช้ query สั้น 2-4 คำ เช่น:
    - "รูปมงคล facebook 2026"
    - "เทพมงคล trending ไทย"
    - "วอลเปเปอร์มงคล ยอดนิยม"
-3. หา content angles ที่ยังไม่ถูกสร้างในฐานข้อมูล
+3. หา content angles ที่ยังไม่ถูกสร้าง
 4. แนะนำ 3-5 ideas ที่แตกต่างกัน
 
 ## Output (JSON)
