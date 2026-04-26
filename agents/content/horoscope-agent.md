@@ -8,6 +8,7 @@
 ## อ่านก่อนเริ่ม
 1. `config.md` — LINE OA handle
 2. `products/mongkol_art/brief.md` — product CTA wording
+3. `skills/content-schedule.md` — slot time สำหรับคำนวณ `scheduled_publish_time`
 
 ## ข้อมูลอ้างอิง — เทพ สี และเลขประจำวัน
 

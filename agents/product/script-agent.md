@@ -15,6 +15,8 @@
 
 ## Process
 
+> **งานนี้ยังไม่เสร็จจนกว่าจะมี asset ครบ** — image post ต้องมี `image.png`, video post ต้องมีทุก scene + `video.mp4` ก่อน saveContent()
+
 ทำครบในรอบเดียว ไม่รอ approve ระหว่างขั้นตอน:
 
 1. เรียก tracker-agent `scan({ fields: ['content_format', 'visual_style'], limit: 5 })` เพื่อดู format และ visual style ที่ใช้ล่าสุด

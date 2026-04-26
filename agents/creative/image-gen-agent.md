@@ -1,34 +1,49 @@
 # Image Gen Agent
 
 ## Role
-สร้างรูปแต่ละ scene โดยใช้ Codex โดยตรง (ไม่เรียก API เอง)
+สร้างรูปโดยใช้ Codex โดยตรง (ไม่เรียก API เอง) — รองรับสอง mode
 
-## Input
-- `scene_prompts[]` จาก script-agent
-- `visual_dna` จาก script-agent — style anchor สำหรับทุก scene
-- `idea_id` สำหรับ output path
+## Mode
+
+### Single Image (editorial content)
+Input จาก story-agent, life-topic-agent:
+- `image_prompt` — prompt สำหรับรูปเดียว
+- `content_id`
+
+### Multi-scene (product content)
+Input จาก script-agent:
+- `scene_prompts[]` — prompts ทีละ scene
+- `visual_dna` — style anchor สำหรับทุก scene
+- `content_id`
 - `product_id` — อ่าน product-specific instructions จาก `products/[product_id]/image-gen-agent.md`
 
-## Process
+---
+
+## Process — Single Image
+
+1. Generate รูปด้วย Codex:
+   ```bash
+   codex exec -s workspace-write "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png"
+   ```
+2. ตรวจว่าไฟล์ถูกสร้างที่ `outputs/scheduled/[content_id]/image.png`
+3. ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/`
+4. คืน path กลับให้ agent ที่เรียก เพื่อ update `image_path` ใน content.json
+
+---
+
+## Process — Multi-scene
+
 1. อ่าน `products/[product_id]/image-gen-agent.md` — ทำตาม instructions ของ product นั้นทุกอย่าง
-2. Generate scene_01 ก่อนเสมอ ตาม instructions ของ product
+2. Generate scene_01 ก่อนเสมอ:
    ```bash
    codex exec -s workspace-write "Generate an image: [SCENE_01_PROMPT], [VISUAL_DNA], no text, high quality. Save to outputs/scheduled/[content_id]/scenes/scene_01.png"
    ```
 3. Generate scene ถัดไปตาม product instructions — ส่ง reference images ตามที่ product กำหนด
 4. ตรวจว่าไฟล์ถูกสร้างครบทุก scene
-5. เรียก tracker-agent `updatePaths(idea_id, { image_paths })` — tracker-agent จัดการว่าจะบันทึกลงที่ไหน
+5. ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/`
+6. เรียก tracker-agent `updatePaths(content_id, { image_paths })`
 
-## Output
-```json
-{
-  "content_id": "...",
-  "images": [
-    { "scene": 1, "path": "outputs/scheduled/[content_id]/scenes/scene_01.png", "duration": 4 },
-    { "scene": 2, "path": "outputs/scheduled/[content_id]/scenes/scene_02.png", "duration": 4 }
-  ]
-}
-```
+---
 
 ## กฎ
 
@@ -38,4 +53,4 @@
 - **Final video** → `outputs/scheduled/[content_id]/video.mp4`
 
 - ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จทุกครั้ง
-- format และ style ให้ยึดตาม product instructions — agent นี้ไม่ตัดสินใจเอง
+- Multi-scene: format และ style ยึดตาม product instructions — agent นี้ไม่ตัดสินใจเอง

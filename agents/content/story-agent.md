@@ -25,6 +25,7 @@
 ## อ่านก่อนเริ่ม
 1. `config.md` — LINE OA handle
 2. `skills/mongkolart-brand.md` — brand voice
+3. `skills/content-schedule.md` — slot time สำหรับคำนวณ `scheduled_publish_time`
 
 ## Input
 
@@ -36,6 +37,8 @@
 เวลาและวันที่จะ post เป็นหน้าที่ของ scheduler — agent นี้สร้าง content อย่างเดียว
 
 ## Process
+
+> **งานนี้ยังไม่เสร็จจนกว่าจะมีรูป** — ขั้นตอน 5-6 บังคับทุกครั้ง ห้าม saveContent() ด้วย image_path ว่าง
 
 1. ทำความเข้าใจ topic และ angle ที่ต้องการ
 2. ค้นหาข้อมูลที่ถูกต้องและน่าเชื่อถือ (ถ้าจำเป็น ให้ web search)
@@ -66,6 +69,10 @@
    - ห้ามมีตัวอักษรในรูป
    - ระบุ "painterly illustration style, highly detailed, no text" ทุกครั้ง
 
+5. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
+6. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`
+   **งานเสร็จเมื่อได้ทั้ง caption และ image_path ที่ไม่ว่าง — ห้าม saveContent() ก่อนมีรูป**
+
 ## Bridge Style
 
 1-2 ประโยคท้าย post — เชื่อมเนื้อหากับ product แบบ organic เขียนใหม่ทุก post ให้ตรงกับ content นั้น ไม่ใช่ template ตายตัว แนวทางตาม topic:
@@ -90,7 +97,7 @@
   "caption": "...",
   "hashtags": [],
   "image_prompt": "...",
-  "image_path": ""
+  "image_path": "outputs/scheduled/[content_id]/image.png"
 }
 ```
 

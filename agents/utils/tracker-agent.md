@@ -22,6 +22,7 @@ outputs/scheduled/
 
 ### saveContent(content)
 สร้าง folder `outputs/scheduled/[content_id]/` และบันทึก `content.json`
+ตั้ง `created_at` เป็น current datetime (ISO 8601, +07:00) อัตโนมัติ — ไม่ต้องรับจาก caller
 Return: `content_id`
 
 ### updateStatus(content_id, status)

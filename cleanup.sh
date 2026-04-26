@@ -63,6 +63,9 @@ delete_old_files() {
   local dir="$1"
   [[ -d "$dir" ]] || return 0
 
+  local find_args=(-type f)
+  (( DAYS > 0 )) && find_args+=(-mtime +"$DAYS")
+
   while IFS= read -r -d '' file; do
     local size
     size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo 0)
@@ -74,7 +77,7 @@ delete_old_files() {
     fi
     (( DELETED++ )) || true
     (( FREED += size )) || true
-  done < <(find "$dir" -type f -not -name ".gitkeep" -mtime +"$DAYS" -print0)
+  done < <(find "$dir" "${find_args[@]}" -print0)
 }
 
 remove_empty_dirs() {
