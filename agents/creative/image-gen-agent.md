@@ -13,7 +13,7 @@
 1. อ่าน `products/[product_id]/image-gen-agent.md` — ทำตาม instructions ของ product นั้นทุกอย่าง
 2. Generate scene_01 ก่อนเสมอ ตาม instructions ของ product
    ```bash
-   codex exec -s workspace-write "Generate an image: [SCENE_01_PROMPT], [VISUAL_DNA], no text, high quality. Save to outputs/images/[idea_id]/scene_01.png"
+   codex exec -s workspace-write "Generate an image: [SCENE_01_PROMPT], [VISUAL_DNA], no text, high quality. Save to outputs/scheduled/[content_id]/scenes/scene_01.png"
    ```
 3. Generate scene ถัดไปตาม product instructions — ส่ง reference images ตามที่ product กำหนด
 4. ตรวจว่าไฟล์ถูกสร้างครบทุก scene
@@ -22,15 +22,20 @@
 ## Output
 ```json
 {
-  "idea_id": "...",
+  "content_id": "...",
   "images": [
-    { "scene": 1, "path": "outputs/images/[idea_id]/scene_01.png", "duration": 4 },
-    { "scene": 2, "path": "outputs/images/[idea_id]/scene_02.png", "duration": 4 }
+    { "scene": 1, "path": "outputs/scheduled/[content_id]/scenes/scene_01.png", "duration": 4 },
+    { "scene": 2, "path": "outputs/scheduled/[content_id]/scenes/scene_02.png", "duration": 4 }
   ]
 }
 ```
 
 ## กฎ
-- บันทึกรูปลง `outputs/images/[idea_id]/scene_0N.png` เสมอ
-- ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จ
+
+**ทุก asset อยู่ใน `outputs/scheduled/[content_id]/` เสมอ:**
+- **Image post** → `outputs/scheduled/[content_id]/image.png`
+- **Video scenes** → `outputs/scheduled/[content_id]/scenes/scene_0N.png`
+- **Final video** → `outputs/scheduled/[content_id]/video.mp4`
+
+- ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จทุกครั้ง
 - format และ style ให้ยึดตาม product instructions — agent นี้ไม่ตัดสินใจเอง

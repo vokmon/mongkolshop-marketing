@@ -18,13 +18,13 @@
 - `jataka` — นิทานชาดก — เรื่องราวในชาติก่อนของพระพุทธเจ้า
 - `astrology_science` — ศาสตร์การดูดวง (โหราศาสตร์ไทย, จีน, ตะวันตก, ไพ่ยิปซี ฯลฯ)
 - `amulet` — เครื่องรางของขลัง ประวัติ ความเชื่อ วิธีใช้ วิธีบูชา
+- `occult` — ไสยศาสตร์ คาถา พิธีกรรม ความเชื่อลึกลับ
 - `festival` — เทศกาลและวันสำคัญทางศาสนา ความหมาย ประเพณี
 - *(และอื่นๆ ตามความเหมาะสม)*
 
 ## อ่านก่อนเริ่ม
-1. `skills/content-schedule.md` — image style และ format
-2. `config.md` — LINE OA handle
-3. `skills/mongkolart-brand.md` — brand voice
+1. `config.md` — LINE OA handle
+2. `skills/mongkolart-brand.md` — brand voice
 
 ## Input
 
@@ -48,24 +48,31 @@
    - **Bridge** — ปิดด้วยการเชื่อม content กับ product แบบ soft และ organic
 4. สร้าง image prompt ตาม topic:
 
-| Topic Type | Subject | Background |
-|---|---|---|
-| deity_* | เทพองค์นั้น full figure | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์ |
-| legend | ตัวละครหลักในตำนาน | Scene จากตำนาน — dramatic, cinematic |
-| jataka | พระโพธิสัตว์หรือตัวละครหลัก | ป่า วัง ธรรมชาติโบราณ ยุคโบราณ |
-| astrology_science | สัญลักษณ์ดวงดาว ราศี | Celestial — ดาว จักรวาล ราศีจักร |
-| amulet | เครื่องรางบนแท่นบูชา | Temple setting — ทอง เทียน ดอกไม้บูชา |
-| festival | เทพประจำเทศกาลหรือสัญลักษณ์ | Festival decoration ตามเทศกาลนั้น |
+**หลักการสำคัญ: รูปต้องเล่าเรื่อง ไม่ใช่แค่ portrait เทพ**
+- เลือก moment หรือ scene ที่สำคัญที่สุดจาก caption ที่เพิ่งเขียน
+- คนดูรูปแล้วต้องรู้สึกอยากอ่าน caption ต่อ หรือรู้สึก relate กับเรื่องที่กำลังเล่า
+- รูปต้องสวยพอที่คนอยาก save เก็บไว้ใช้เป็น wallpaper หรือแชร์ต่อได้เลย
 
-   - format: 4:5 (1080x1350)
+| Topic Type | Scene ที่เลือก | Background/Setting | Mood |
+|---|---|---|---|
+| deity_* | Scene จาก caption — เทพกำลังทำสิ่งที่เล่าถึง ไม่ใช่นั่งอยู่นิ่งๆ | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์ | Divine, dramatic, cinematic |
+| legend | จุด climax ของตำนาน — moment ที่เข้มข้นที่สุด | Illustrated scene จากเรื่องนั้น | Epic, atmospheric |
+| jataka | Moment สำคัญในชาดก — การตัดสินใจหรือการเสียสละ | Illustrated scene จากเรื่องนั้น | Ancient, warm, spiritual |
+| astrology_science | Visual ของสัญลักษณ์นั้นในจักรวาล — ไม่ใช่แค่ดาวลอยๆ | Celestial — ดาว ราศี จักรวาล | Mystical, cosmic |
+| amulet | เครื่องรางในบริบทที่ใช้จริง — บนแท่นบูชา มีแสงสว่างรอบ | Sacred objects บนแท่นบูชา | Sacred, intimate |
+| festival | เทพหรือตัวละครในบรรยากาศเทศกาลนั้นจริงๆ | บรรยากาศเทศกาลนั้น | Festive, joyful, colorful |
+
+   - format: 4:5 (1080x1350 px) — ระบุขนาดนี้ใน prompt เสมอ
    - ห้ามมีตัวอักษรในรูป
+   - ระบุ "painterly illustration style, highly detailed, no text" ทุกครั้ง
 
 ## Bridge Style
 
-- deity → "คนที่ผูกพันกับ[เทพ]มักเลือก[เทพ]เป็นวอลเปเปอร์มงคล..."
-- jataka/legend → "ปัญญาจากเรื่องนี้เตือนให้เรานึกถึงสิ่งศักดิ์สิทธิ์รอบตัว..."
-- festival → "วันนี้เป็นโอกาสดีที่จะเสริมพลังมงคลในชีวิต..."
-- ปิดด้วย CTA อ่อนๆ — ลิงก์ใน bio หรือ LINE handle — **ไม่ขายตรง**
+1-2 ประโยคท้าย post — เชื่อมเนื้อหากับ product แบบ organic เขียนใหม่ทุก post ให้ตรงกับ content นั้น ไม่ใช่ template ตายตัว แนวทางตาม topic:
+- deity → เชื่อมกับความผูกพันหรือการพกเทพองค์นั้นติดตัว
+- jataka/legend → เชื่อมกับปัญญาหรือสิ่งยึดเหนี่ยวจากเรื่องที่เล่า
+- festival → เชื่อมกับโอกาสหรือพลังงานของวันนั้น
+- ปิดด้วย CTA อ่อนๆ — LINE handle จาก `config.md` — **ไม่ขายตรง**
 
 ## Output
 
@@ -79,6 +86,7 @@
   "deity": "พระพิฆเนศ",
   "format": "image",
   "status": "pending",
+  "scheduled_publish_time": 1746342000,
   "caption": "...",
   "hashtags": [],
   "image_prompt": "...",

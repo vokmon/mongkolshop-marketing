@@ -2,134 +2,96 @@
 
 ## Setup ครั้งแรก (ทำครั้งเดียว)
 
-> **ทางลัด:** รัน `./setup.sh` เพื่อทำขั้นตอนที่ 1-2 อัตโนมัติ แล้วข้ามไปขั้นตอนที่ 3 ได้เลย
+> **ทางลัด:** รัน `./setup.sh` เพื่อทำขั้นตอนที่ 1-2 อัตโนมัติ
 
 ---
 
 ### 1. ตั้ง ENV vars
 
-สร้างไฟล์ `.env` ใน project root (ข้างๆ `CLAUDE.md`):
+สร้างไฟล์ `.env` ใน project root:
 
 ```
 FB_PAGE_ID=your_page_id
 FB_ACCESS_TOKEN=your_long_lived_token
 ```
 
-> ตรวจสอบว่า `.env` อยู่ใน `.gitignore` เพื่อไม่ให้ token ขึ้น git
->
-> หรือใช้ `./setup.sh` — จะอ่าน `.env` และบันทึก env vars ลง `.claude/settings.local.json` ให้อัตโนมัติ
+> ตรวจสอบว่า `.env` อยู่ใน `.gitignore`
 
 ---
 
-### 2. ตั้ง Cron 2 ตัว
+### 2. รัน setup.sh
 
-พิมพ์ใน Claude Code ทีละอัน:
-
-**Cron 1 — สร้าง content ทุกเช้า ตี 5:**
-```
-ตั้ง cron รัน post-agent ทุกวัน 05:00 ICT
-อ่าน agents/scheduler/post-agent.md
+```bash
+./setup.sh
 ```
 
-**Cron 2 — โพส news ทุกเช้า 8:30:**
-```
-ตั้ง cron รัน news-agent ทุกวัน 08:30 ICT
-อ่าน agents/content/news-agent.md
-```
-
-> **หมายเหตุ:** Cron ของ Claude Code หมดอายุทุก 7 วัน ต้องต่ออายุทุกสัปดาห์
+บันทึก env vars ลง `.claude/settings.local.json` และตั้ง daily cron สำหรับ news
 
 ---
 
----
-
-## ตารางการใช้งานประจำวัน
-
-| เวลา | ระบบทำอะไร | คุณต้องทำอะไร | คำสั่งที่พิมพ์ใน Claude Code |
-|---|---|---|---|
-| **ตี 5** | Cron รัน post-agent อัตโนมัติ — สร้าง content ทุก slot สำหรับวันนี้ | ไม่ต้องทำอะไร | — |
-| **8:30** | Cron รัน news-agent อัตโนมัติ — โพสข่าวทันที | ไม่ต้องทำอะไร | — |
-| **ช่วงเช้า** | รอ human approve | ดู content ที่รอ approve | `แสดง pending content วันนี้` |
-| **ช่วงเช้า** | — | Approve ทั้งหมด + ส่ง Facebook | `approve และ schedule content ทั้งหมดวันนี้` |
-| **ตลอดวัน** | Facebook auto-publish ตรงเวลา (12:00, 19:00) | ไม่ต้องทำอะไร | — |
-
----
-
-## คำสั่ง Approve (เลือกตามสถานการณ์)
-
-### ดู content ก่อน approve
+## Flow การทำงาน
 
 ```
-แสดง pending content วันนี้
-```
-> จะแสดง caption + path รูปของแต่ละ slot
+สัปดาห์ละครั้ง (วันอาทิตย์หรือตามสะดวก)
+  └── ./generate-content.sh
+        ├── สร้าง content 7 วัน (Slot 1, 3, 4 + Product)
+        ├── Auto-approve ทั้งหมด
+        ├── Schedule ขึ้น Facebook ตรงเวลา
+        └── Cleanup outputs + Codex sessions เก่า
 
-### Approve ทั้งหมดในครั้งเดียว
+ทุกวัน 8:30 (cron อัตโนมัติ)
+  └── news-agent — ดึงข่าว/ราคาทอง/ฤกษ์ โพสทันที
 
-```
-approve และ schedule content ทั้งหมดวันนี้
-```
-
-### Approve ทีละอัน
-
-```
-approve idea_001 และ schedule ขึ้น Facebook
-```
-
-### แก้ caption ก่อน approve
-
-```
-แก้ caption ของ idea_002 เป็น "[caption ใหม่]" แล้ว approve และ schedule
-```
-
-### ไม่ใช้ content ชิ้นไหน
-
-```
-reject idea_003
+ตลอดสัปดาห์ (Facebook auto-publish)
+  └── 7:00 / 12:00 / 15:00 / 19:00 — posts ออกตรงเวลา
 ```
 
 ---
 
-## คำสั่ง Product Post (สร้างเมื่อต้องการ)
+## คำสั่ง generate-content.sh
 
-### Phase 1 — หา ideas
+```bash
+# 7 วัน เริ่มพรุ่งนี้ (default)
+./generate-content.sh
 
-```
-สร้าง content mongkol_art
-อ่าน agents/main-agent.md แล้วรัน Phase 1
-```
+# กำหนดจำนวนวัน
+./generate-content.sh -d 14
 
-> ระบบจะแสดง 3-5 ideas ให้เลือก
+# กำหนดวันเริ่มต้น
+./generate-content.sh --from 2026-05-01
 
-### Phase 2 — สร้างรูป/วิดีโอ
-
-```
-เลือก idea_002 แล้วไปต่อ Phase 2
-```
-
-### Phase 3 — Schedule ขึ้น Facebook
-
-```
-approve idea_002 และ schedule วันศุกร์ 19:00
+# กำหนดทั้งคู่
+./generate-content.sh --from 2026-05-01 -d 3
 ```
 
 ---
 
-## คำสั่ง Maintenance
+## Product Post (สร้าง manual เมื่อต้องการ)
 
-| ทำเมื่อไหร่ | คำสั่งที่พิมพ์ |
-|---|---|
-| ทุก 7 วัน (cron หมดอายุ) | `ต่ออายุ cron ทั้ง 2 ตัว ให้ run ต่ออีก 7 วัน` |
-| ทุก ~50 วัน (FB token หมด) | อัปเดต `FB_ACCESS_TOKEN` ใน `~/.zshrc` แล้ว `source ~/.zshrc` |
-| ทุกอาทิตย์ | `รัน tracker-agent cleanup ลบ posted content เกิน 30 วัน` |
-| ถ้า cron พัง / ไม่รัน | `รัน post-agent สำหรับวันนี้ — อ่าน agents/scheduler/post-agent.md` |
+```
+สร้าง product post
+อ่าน agents/product/script-agent.md
+```
+
+> agent จะสร้างรูป/วิดีโอ + caption + schedule ให้ครบในรอบเดียว
 
 ---
 
-## คำสั่ง เช็คสถานะ
+## Maintenance
+
+| สิ่งที่ต้องทำ | เมื่อไหร่ | วิธี |
+|---|---|---|
+| ต่ออายุ cron (news) | ทุก 7 วัน | `ต่ออายุ cron news-agent ให้รันต่ออีก 7 วัน` |
+| อัปเดต FB token | ทุก ~50 วัน | อัปเดต `FB_ACCESS_TOKEN` ใน `.env` แล้วรัน `./setup.sh` |
+
+> Cleanup รันอัตโนมัติทุกครั้งที่รัน `generate-content.sh` ไม่ต้องทำแยก
+
+---
+
+## เช็คสถานะ
 
 ```
-แสดง content ทั้งหมดวันนี้ ทุก status
+แสดง content ที่ scheduled ทั้งหมดสัปดาห์นี้
 ```
 
 ```
@@ -138,20 +100,4 @@ approve idea_002 และ schedule วันศุกร์ 19:00
 
 ```
 เช็ค cron ที่ตั้งไว้ทั้งหมด
-```
-
----
-
-## Flow สรุป
-
-```
-ตี 5: Cron → post-agent สร้าง content ทุก slot
-         ↓
-ช่วงเช้า: คุณพิมพ์ "แสดง pending content วันนี้"
-         ↓
-         ดู → พิมพ์ "approve และ schedule content ทั้งหมดวันนี้"
-         ↓
-8:30: news-agent โพสข่าวอัตโนมัติ
-         ↓
-12:00 & 19:00: Facebook auto-publish ตรงเวลา
 ```

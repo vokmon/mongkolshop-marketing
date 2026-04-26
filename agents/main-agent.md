@@ -5,7 +5,7 @@ Orchestrator สำหรับ product post pipeline (image/video sale posts)
 รับคำสั่งจาก user และกระจายงานให้ sub-agents
 
 > Pipeline นี้ใช้สำหรับ **product posts เท่านั้น**
-> Editorial content (horoscope, story ฯลฯ) ใช้ post-agent แทน
+> Editorial content (horoscope, story ฯลฯ) ใช้ generate-content.sh แทน
 
 ## Workflow
 
@@ -20,24 +20,19 @@ Phase 1: Research → [Human เลือก idea] → Phase 2: Creative → [Hu
 **Trigger:** User สั่ง "สร้าง content [product_id]" หรือระบุ topic
 
 1. รัน `agents/product/research-agent` — หา trending angles
-2. รัน `agents/product/script-agent` — สร้าง hook + script + scene_prompts สำหรับทุก angle
-3. เรียก tracker-agent `saveContent(content)` สำหรับทุก idea
-4. แสดง ideas ให้ user เลือก (hook + angle ของแต่ละ idea)
+2. แสดง angles ให้ user เลือก (topic + angle ของแต่ละ idea)
 
-**Human Checkpoint #1:** User เลือก idea ที่ต้องการ
-→ เรียก tracker-agent `updateStatus(id, 'approved')`
+**Human Checkpoint #1:** User เลือก angle ที่ต้องการ
 
 ---
 
 ## Phase 2 — Creative Production
 
-**Trigger:** มี content ที่ `status = 'approved'`
+**Trigger:** User เลือก angle แล้ว
 
-1. รัน `image-gen-agent` — สร้าง scene images (parallel ถ้าทำได้)
-2. รัน `asset-agent` — สร้าง thumbnail
-3. รัน `video-agent` — รวม images + audio เป็น video.mp4
-4. เรียก tracker-agent `updatePaths(id, paths)` และ `updateStatus(id, 'pending')`
-5. แสดง preview ให้ user review (video path + caption)
+1. รัน `agents/product/script-agent` สำหรับ angle ที่เลือก — สร้าง hook, script, caption, scene_prompts และ generate รูป/video
+   - script-agent บันทึก content.json ด้วย `status: 'pending'` และเรียก tracker-agent `saveContent()` เอง
+2. แสดง preview ให้ user review (image/video path + caption)
 
 **Human Checkpoint #2:** User approve หรือ request แก้ไข
 → approve: เรียก tracker-agent `updateStatus(id, 'approved')`
@@ -49,9 +44,8 @@ Phase 1: Research → [Human เลือก idea] → Phase 2: Creative → [Hu
 
 **Trigger:** User approve content จาก Phase 2
 
-1. เรียก `facebook-agent` — schedule post ขึ้น Facebook API
-2. เรียก tracker-agent `updateStatus(id, 'scheduled')`
-3. รายงาน fb_post_id และเวลาที่จะ publish ให้ user
+1. เรียก `agents/channels/post-agent` — จัดการ channel_status และ schedule ทุก channel
+2. รายงานผลให้ user (เวลาที่จะ publish ต่อ channel)
 
 ---
 

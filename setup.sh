@@ -30,7 +30,7 @@ if [ -z "$FB_PAGE_ID" ] || [ -z "$FB_ACCESS_TOKEN" ]; then
   exit 1
 fi
 
-# 3. เขียน env vars ลง .claude/settings.local.json (project-level, gitignored)
+# 3. เขียน env vars ลง .claude/settings.local.json
 mkdir -p .claude
 cat > .claude/settings.local.json << EOF
 {
@@ -48,16 +48,21 @@ if ! grep -qF ".claude/settings.local.json" .gitignore 2>/dev/null; then
   echo "✓ เพิ่ม .claude/settings.local.json ใน .gitignore"
 fi
 
+# 5. ตั้ง cron — news-agent รายวัน 8:30 ICT (เดียวที่ต้องการ)
+echo ""
+echo "ขั้นตอนต่อไป — ตั้ง cron สำหรับ news-agent:"
+echo ""
+echo "เปิด Claude Code แล้วพิมพ์:"
+echo ""
+echo "  ตั้ง cron รัน news-agent ทุกวัน 08:30 ICT"
+echo "  อ่าน agents/content/news-agent.md"
+echo ""
+echo "────────────────────────────────────────────"
+echo ""
+echo "การรัน content generation (สัปดาห์ละครั้ง):"
+echo ""
+echo "  ./generate-content.sh              # 7 วัน เริ่มพรุ่งนี้"
+echo "  ./generate-content.sh -d 14        # 14 วัน"
+echo "  ./generate-content.sh --from DATE  # กำหนดวันเริ่มต้น"
 echo ""
 echo "✓ Setup เสร็จแล้ว"
-echo ""
-echo "ขั้นตอนต่อไป — เปิด Claude Code แล้วพิมพ์:"
-echo ""
-echo "  /schedule"
-echo ""
-echo "แล้วสร้าง 2 cron jobs:"
-echo "  1. รัน post-agent ทุกวัน 05:00 ICT"
-echo "     อ่าน agents/scheduler/post-agent.md"
-echo ""
-echo "  2. รัน news-agent ทุกวัน 08:30 ICT"
-echo "     อ่าน agents/content/news-agent.md"

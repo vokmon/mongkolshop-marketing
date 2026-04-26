@@ -36,7 +36,7 @@ Phase 1: Research → [Human เลือก idea] → Phase 2: Creative → [Hu
 | Task | Agent |
 |---|---|
 | สร้าง content ใหม่ (ทั้ง pipeline) | `agents/main-agent.md` |
-| Research + script เท่านั้น | `agents/research/research-agent.md` |
+| Research + script เท่านั้น | `agents/product/research-agent.md` |
 | สร้างรูป | `agents/creative/image-gen-agent.md` |
 | สร้าง video | `agents/creative/video-agent.md` |
 | สร้าง thumbnail | `agents/creative/asset-agent.md` |
@@ -49,8 +49,13 @@ Phase 1: Research → [Human เลือก idea] → Phase 2: Creative → [Hu
 
 ```
 agents/
-├── main-agent.md              # orchestrator (3-phase pipeline)
-├── research/
+├── main-agent.md              # orchestrator (manual product pipeline)
+├── content/
+│   ├── horoscope-agent.md     # ดวงวันนี้
+│   ├── story-agent.md         # เรื่องเทพ / ตำนาน
+│   ├── life-topic-agent.md    # life topics
+│   └── news-agent.md          # ข่าว (daily cron)
+├── product/
 │   ├── research-agent.md      # web search — trends + angles
 │   └── script-agent.md        # hook, script, caption, scene prompts
 ├── creative/
@@ -58,12 +63,13 @@ agents/
 │   ├── video-agent.md         # FFmpeg composition
 │   └── asset-agent.md         # thumbnails
 ├── channels/
-│   ├── facebook-agent.md      # active
+│   ├── post-agent.md          # auto-approve + schedule to channels
+│   ├── facebook-agent.md      # Facebook Graph API
 │   ├── tiktok-agent.md        # future
 │   ├── ig-agent.md            # future
 │   └── youtube-agent.md       # future
 └── utils/
-    └── tracker-agent.md       # Supabase read/write
+    └── tracker-agent.md       # file-based tracker
 products/
 └── mongkol_art.md             # product brief
 skills/
@@ -72,10 +78,8 @@ skills/
 └── platform-specs.md          # per-platform format limits
 docs/                          # strategy, campaign plans
 outputs/
-├── scripts/                   # generated script JSON files
-├── images/                    # generated scene images
-├── videos/                    # composed video files
-└── published/                 # publish records
+├── scheduled/                 # all content — [content_id]/content.json + assets
+└── audio/                     # downloaded background music
 ```
 
 ---
@@ -96,23 +100,19 @@ codex exec -s workspace-write "<task>"
 
 ### Image Generation Convention
 - รัน `codex exec -s workspace-write` โดยตรง
-- บันทึกลง `outputs/images/[idea_id]/`
+- บันทึกลง `outputs/scheduled/[content_id]/`
 - ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จ
 
 ---
 
-## Database
+## Tracking
 
-**Supabase** — content tracking และ duplicate prevention
-
-### Schema
-```sql
-content (id, product_id, topic, angle, hook, content_format, visual_style, script_path, image_paths, video_path, status, created_at)
-published (id, content_id, platform, url, published_at)
-```
+File-based — ทุก content เก็บเป็น `content.json` ใน `outputs/scheduled/[content_id]/`
+tracker-agent จัดการ read/write ทั้งหมด — agents อื่นไม่จัดการไฟล์ตรงๆ
 
 ### Status Flow
-`draft` → `approved` → `ready` → `published` / `failed`
+`pending` → `approved` → `scheduled` → `posted` / `failed`
+news ใช้ `auto_posted` แทน (post ทันที ไม่ผ่าน schedule)
 
 ---
 
@@ -137,12 +137,8 @@ ANTHROPIC_API_KEY=
 # OpenAI (Codex image generation)
 OPENAI_API_KEY=
 
-# Supabase
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-
 # Facebook
-META_ACCESS_TOKEN=
+FB_ACCESS_TOKEN=
 FB_PAGE_ID=
 
 # TikTok (future)
@@ -166,7 +162,6 @@ YOUTUBE_REFRESH_TOKEN=
 
 - ห้าม hardcode API keys — อ่านจาก ENV เสมอ
 - output ทุกอย่างบันทึกใน `outputs/`
-- บันทึก Supabase ทุกครั้งที่ status เปลี่ยน
 - ห้ามระบุว่าใช้ AI สร้างรูปในโฆษณา
 - ถามก่อนทำถ้าไม่แน่ใจ อย่า assume
 

@@ -35,8 +35,8 @@
 ## FFmpeg Composition
 ```bash
 ffmpeg \
-  -loop 1 -t [duration] -i outputs/images/[idea_id]/scene_01_cap.png \
-  -loop 1 -t [duration] -i outputs/images/[idea_id]/scene_02_cap.png \
+  -loop 1 -t [duration] -i outputs/scheduled/[content_id]/scenes/scene_01_cap.png \
+  -loop 1 -t [duration] -i outputs/scheduled/[content_id]/scenes/scene_02_cap.png \
   ... \
   -i [audio_path] \
   -filter_complex "
@@ -47,16 +47,16 @@ ffmpeg \
   " \
   -map "[v]" -map [audio_index]:a \
   -shortest -c:v libx264 -pix_fmt yuv420p -c:a aac \
-  outputs/videos/[idea_id].mp4
+  outputs/scheduled/[content_id]/video.mp4
 ```
 
 ## Process
 1. อ่าน `products/[product_id]/video-agent.md` — ทำตาม caption layer spec ของ product
 2. ตรวจว่า images ทุก scene มีอยู่จริง
 3. เลือก audio track ตาม mood
-4. Burn captions ลง images ด้วย Pillow → บันทึกเป็น `scene_0N_cap.png`
+4. Burn captions ลง images ด้วย Pillow → บันทึกเป็น `scenes/scene_0N_cap.png`
 5. รัน FFmpeg รวม captioned images + audio
-6. บันทึกลง `outputs/videos/[idea_id].mp4`
+6. บันทึกลง `outputs/scheduled/[content_id]/video.mp4`
 7. เรียก tracker-agent `updatePaths` และ `updateStatus([idea_id], 'ready')`
 
 ## กฎ
