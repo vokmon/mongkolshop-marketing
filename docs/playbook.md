@@ -79,10 +79,10 @@ FB_ACCESS_TOKEN=your_long_lived_token
 
 ## Maintenance
 
-| สิ่งที่ต้องทำ | เมื่อไหร่ | วิธี |
-|---|---|---|
-| ต่ออายุ cron (news) | ทุก 7 วัน | `ต่ออายุ cron news-agent ให้รันต่ออีก 7 วัน` |
-| อัปเดต FB token | ทุก ~50 วัน | อัปเดต `FB_ACCESS_TOKEN` ใน `.env` แล้วรัน `./setup.sh` |
+| สิ่งที่ต้องทำ       | เมื่อไหร่   | วิธี                                                    |
+| ------------------- | ----------- | ------------------------------------------------------- |
+| ต่ออายุ cron (news) | ทุก 7 วัน   | `ต่ออายุ cron news-agent ให้รันต่ออีก 7 วัน`            |
+| อัปเดต FB token     | ทุก ~50 วัน | อัปเดต `FB_ACCESS_TOKEN` ใน `.env` แล้วรัน `./setup.sh` |
 
 > Cleanup รันอัตโนมัติทุกครั้งที่รัน `generate-content.sh` ไม่ต้องทำแยก
 
@@ -100,4 +100,15 @@ FB_ACCESS_TOKEN=your_long_lived_token
 
 ```
 เช็ค cron ที่ตั้งไว้ทั้งหมด
+```
+
+ตัวอย่าง
+
+```
+1. สร้าง editorial content ครบทุก slot (ยกเว้น Slot 2 ข่าว) สำหรับ ${DAYS} วัน เริ่มจาก ${FROM_DATE}
+     อ่าน skills/content-schedule.md
+2. เรียก tracker-agent updateStatus ทุก content ที่เพิ่งสร้างเป็น 'approved';
+3. ส่งทั้งหมดให้ agents/channels/post-agent.md จัดการ
+
+DAYS=1, FROM_DATE=29/04/2026
 ```

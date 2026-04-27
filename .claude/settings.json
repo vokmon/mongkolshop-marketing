@@ -7,7 +7,7 @@
       "Bash(codex *)",
       "Bash(mkdir *)",
       "Bash(ls *)",
-      "Bash(rm -rf ~/.codex/generated_images/*)",
+      "Bash(rm -rf *)",
       "Write(outputs/scheduled/**)",
       "Edit(outputs/scheduled/**)"
     ]

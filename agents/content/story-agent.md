@@ -61,14 +61,14 @@
 - คนดูรูปแล้วต้องรู้สึกอยากอ่าน caption ต่อ หรือรู้สึก relate กับเรื่องที่กำลังเล่า
 - รูปต้องสวยพอที่คนอยาก save เก็บไว้ใช้เป็น wallpaper หรือแชร์ต่อได้เลย
 
-| Topic Type        | Scene ที่เลือก                                                   | Background/Setting                                | Mood                        | Art Style                                                                 |
-| ----------------- | ---------------------------------------------------------------- | ------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------- |
-| deity\_\*         | Scene จาก caption — เทพกำลังทำสิ่งที่เล่าถึง ไม่ใช่นั่งอยู่นิ่งๆ | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์  | Divine, dramatic, cinematic | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
-| legend            | จุด climax ของตำนาน — moment ที่เข้มข้นที่สุด                    | Illustrated scene จากเรื่องนั้น                   | Epic, atmospheric           | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
-| jataka            | Moment สำคัญในชาดก — การตัดสินใจหรือการเสียสละ                   | Illustrated scene จากเรื่องนั้น                   | Ancient, warm, spiritual    | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
-| astrology_science | Visual ของสัญลักษณ์นั้นในจักรวาล — ไม่ใช่แค่ดาวลอยๆ              | Celestial — ดาว ราศี จักรวาล                      | Mystical, cosmic            | digital illustration, ornate celestial art, intricate mandala-inspired details |
-| amulet            | เครื่องรางในบริบทที่ใช้จริง — บนแท่นบูชา มีแสงสว่างรอบ           | Sacred objects บนแท่นบูชา                         | Sacred, intimate            | detailed digital painting, sacred object photography style, dramatic lighting |
-| festival          | เทพหรือตัวละครในบรรยากาศเทศกาลนั้นจริงๆ                          | บรรยากาศเทศกาลนั้น                                | Festive, joyful, colorful   | Thai traditional mural painting style, ornate decorative details, vibrant colors |
+| Topic Type        | Scene ที่เลือก                                                   | Background/Setting                               | Mood                        | Art Style                                                                                                                         |
+| ----------------- | ---------------------------------------------------------------- | ------------------------------------------------ | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| deity\_\*         | Scene จาก caption — เทพกำลังทำสิ่งที่เล่าถึง ไม่ใช่นั่งอยู่นิ่งๆ | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์ | Divine, dramatic, cinematic | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| legend            | จุด climax ของตำนาน — moment ที่เข้มข้นที่สุด                    | Illustrated scene จากเรื่องนั้น                  | Epic, atmospheric           | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| jataka            | Moment สำคัญในชาดก — การตัดสินใจหรือการเสียสละ                   | Illustrated scene จากเรื่องนั้น                  | Ancient, warm, spiritual    | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| astrology_science | Visual ของสัญลักษณ์นั้นในจักรวาล — ไม่ใช่แค่ดาวลอยๆ              | Celestial — ดาว ราศี จักรวาล                     | Mystical, cosmic            | digital illustration, ornate celestial art, intricate mandala-inspired details                                                    |
+| amulet            | เครื่องรางในบริบทที่ใช้จริง — บนแท่นบูชา มีแสงสว่างรอบ           | Sacred objects บนแท่นบูชา                        | Sacred, intimate            | detailed digital painting, sacred object photography style, dramatic lighting                                                     |
+| festival          | เทพหรือตัวละครในบรรยากาศเทศกาลนั้นจริงๆ                          | บรรยากาศเทศกาลนั้น                               | Festive, joyful, colorful   | Thai traditional mural painting style, ornate decorative details, vibrant colors                                                  |
 
 - format: 4:5 (1080x1350 px) — ระบุขนาดนี้ใน prompt เสมอ
 - ห้ามมีตัวอักษรในรูป — ระบุ "no text" ทุกครั้ง
@@ -97,6 +97,8 @@
 - บางทีขึ้นต้นประโยคด้วย "แต่...", "เพราะ...", "นั่นแปลว่า..."
 - เล่าเรื่องให้รู้สึกว่าคนเขียน "รู้จริง" ไม่ใช่แค่ summarize Wikipedia
 - **ให้เนื้อหา develop และ land เต็มที่ก่อน** — ห้ามรีบปิดหรือสรุปเร็ว bridge ต้องรู้สึกเหมือน afterthought ไม่ใช่จุดหมายของทั้ง post
+- **Emoji**: ใช้เบาๆ 5 - 10 ตัวต่อ post — วางที่ highlight สำคัญ จุดเปลี่ยนอารมณ์ หรือท้าย bridge เท่านั้น ห้ามขึ้นทุกย่อหน้าด้วย emoji
+- **Paragraph**: แบ่งย่อหน้าให้แต่ละก้อนมีความคิดเดียว ไม่ยาวเกิน 3-4 บรรทัด เว้นบรรทัดว่างระหว่างย่อหน้าทุกครั้ง อ่านสบายบนมือถือ
 
 ## Bridge Style
 
@@ -130,7 +132,7 @@
 ## กฎ Content
 
 - Caption ความยาว:
-  - `deity_history`, `deity_virtue`, `legend`, `jataka` — **300-450 คำ** เรื่องเล่าต้องมีพื้นที่พอให้เรื่องพัฒนาและ land ก่อนจบ ห้ามรวบรัดจนเรื่องไม่สมบูรณ์
-  - topic อื่น — **200-300 คำ** พอสมควร ไม่สั้นไม่ยาวเกินไป
+  - `deity_history`, `deity_virtue`, `legend`, `jataka` — **400-550 คำ** เรื่องเล่าต้องมีพื้นที่พอให้เรื่องพัฒนาและ land ก่อนจบ ห้ามรวบรัดจนเรื่องไม่สมบูรณ์
+  - topic อื่น — **250-350 คำ** พอสมควร ไม่สั้นไม่ยาวเกินไป
 - hashtag 4-6 อัน — เลือกให้ตรงกับ topic ไม่ใช่แค่ hashtag product
 - เทพองค์เดิมสร้างได้หลาย post แต่ต้องคนละ angle — เรียก tracker-agent scan() ตรวจก่อนเสมอ
