@@ -16,7 +16,10 @@
 | YouTube | ใช้ `YOUTUBE_CLIENT_ID` จาก ENV | Future |
 
 ## CTA Templates
-ตัวอย่าง — ปรับ wording ได้ตาม content แต่ LINE OA handle ต้องมาจากที่นี่เสมอ
-- "Add LINE `@652hgnwz` เพื่อรับวอลเปเปอร์มงคลของคุณ"
-- "Add น้องมงคล link in bio รับวอลเปเปอร์ตรงดวงคุณ"
-- "ลิงก์ใน bio — วอลเปเปอร์มงคลตรงดวง"
+ตัวอย่าง — ปรับ wording ได้ตาม content แต่ LINE OA link ต้องมาจากที่นี่เสมอ
+**ใช้ link เสมอ ห้ามใส่แค่ handle text ตรงๆ**
+
+- LINE OA link: `https://line.me/ti/p/@652hgnwz`
+- "ทักมาได้เลยที่ [LINE MongkolArt](https://line.me/ti/p/@652hgnwz)"
+- "ดูได้ที่ [น้องมงคล LINE](https://line.me/ti/p/@652hgnwz) นะ"
+- "รับวอลเปเปอร์ตรงดวงได้ที่ [LINE MongkolArt](https://line.me/ti/p/@652hgnwz)"

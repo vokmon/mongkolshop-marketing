@@ -54,3 +54,8 @@ Input จาก script-agent:
 
 - ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จทุกครั้ง
 - Multi-scene: format และ style ยึดตาม product instructions — agent นี้ไม่ตัดสินใจเอง
+
+**รูปที่มีคนหรือฉากชีวิต (lifestyle/human scene):**
+- ใช้ `Southeast Asian` สำหรับ features ของคน — ไม่ใช่ยุโรปหรือตะวันตก
+- ใช้ `contemporary Thailand` สำหรับ setting — ครอบคลุมทั้ง Bangkok และเมืองต่างจังหวัดที่ทันสมัย ไม่ใช่ชนบทหรือทุ่งนา
+- ตัวอย่าง: `contemporary Thailand setting, Southeast Asian woman, modern urban lifestyle`
