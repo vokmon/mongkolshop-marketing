@@ -61,18 +61,18 @@
 - คนดูรูปแล้วต้องรู้สึกอยากอ่าน caption ต่อ หรือรู้สึก relate กับเรื่องที่กำลังเล่า
 - รูปต้องสวยพอที่คนอยาก save เก็บไว้ใช้เป็น wallpaper หรือแชร์ต่อได้เลย
 
-| Topic Type        | Scene ที่เลือก                                                   | Background/Setting                               | Mood                        |
-| ----------------- | ---------------------------------------------------------------- | ------------------------------------------------ | --------------------------- |
-| deity\_\*         | Scene จาก caption — เทพกำลังทำสิ่งที่เล่าถึง ไม่ใช่นั่งอยู่นิ่งๆ | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์ | Divine, dramatic, cinematic |
-| legend            | จุด climax ของตำนาน — moment ที่เข้มข้นที่สุด                    | Illustrated scene จากเรื่องนั้น                  | Epic, atmospheric           |
-| jataka            | Moment สำคัญในชาดก — การตัดสินใจหรือการเสียสละ                   | Illustrated scene จากเรื่องนั้น                  | Ancient, warm, spiritual    |
-| astrology_science | Visual ของสัญลักษณ์นั้นในจักรวาล — ไม่ใช่แค่ดาวลอยๆ              | Celestial — ดาว ราศี จักรวาล                     | Mystical, cosmic            |
-| amulet            | เครื่องรางในบริบทที่ใช้จริง — บนแท่นบูชา มีแสงสว่างรอบ           | Sacred objects บนแท่นบูชา                        | Sacred, intimate            |
-| festival          | เทพหรือตัวละครในบรรยากาศเทศกาลนั้นจริงๆ                          | บรรยากาศเทศกาลนั้น                               | Festive, joyful, colorful   |
+| Topic Type        | Scene ที่เลือก                                                   | Background/Setting                                | Mood                        | Art Style                                                                 |
+| ----------------- | ---------------------------------------------------------------- | ------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------- |
+| deity\_\*         | Scene จาก caption — เทพกำลังทำสิ่งที่เล่าถึง ไม่ใช่นั่งอยู่นิ่งๆ | Sacred realm — สวรรค์ วิหาร ธรรมชาติศักดิ์สิทธิ์  | Divine, dramatic, cinematic | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| legend            | จุด climax ของตำนาน — moment ที่เข้มข้นที่สุด                    | Illustrated scene จากเรื่องนั้น                   | Epic, atmospheric           | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| jataka            | Moment สำคัญในชาดก — การตัดสินใจหรือการเสียสละ                   | Illustrated scene จากเรื่องนั้น                   | Ancient, warm, spiritual    | Thai traditional mural painting style, Ramakien temple fresco art, flat perspective with ornate decorative details, bold outlines |
+| astrology_science | Visual ของสัญลักษณ์นั้นในจักรวาล — ไม่ใช่แค่ดาวลอยๆ              | Celestial — ดาว ราศี จักรวาล                      | Mystical, cosmic            | digital illustration, ornate celestial art, intricate mandala-inspired details |
+| amulet            | เครื่องรางในบริบทที่ใช้จริง — บนแท่นบูชา มีแสงสว่างรอบ           | Sacred objects บนแท่นบูชา                         | Sacred, intimate            | detailed digital painting, sacred object photography style, dramatic lighting |
+| festival          | เทพหรือตัวละครในบรรยากาศเทศกาลนั้นจริงๆ                          | บรรยากาศเทศกาลนั้น                                | Festive, joyful, colorful   | Thai traditional mural painting style, ornate decorative details, vibrant colors |
 
 - format: 4:5 (1080x1350 px) — ระบุขนาดนี้ใน prompt เสมอ
-- ห้ามมีตัวอักษรในรูป
-- ระบุ "painterly illustration style, highly detailed, no text" ทุกครั้ง
+- ห้ามมีตัวอักษรในรูป — ระบุ "no text" ทุกครั้ง
+- ใช้ Art Style ตาม topic type จากตารางด้านบน — **ห้ามใช้ "painterly illustration style, highly detailed"** เพราะดึง model ไปหา Western realism
 
 5. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
 6. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`

@@ -65,7 +65,8 @@
      - travel → Journey landscape — ภูเขา เส้นทาง ขอบฟ้า คนเดินทาง
      - home → ห้องสวยสงบ minimal มีแสงธรรมชาติ
    - ภาพต้องดึงดูดและ relate กับ hook — คนเห็นรูปแล้วอยากอ่าน caption
-   - ห้ามมีตัวอักษรในรูป, format 4:5 (1080x1350), lifestyle photography หรือ cinematic style
+   - ห้ามมีตัวอักษรในรูป, format 4:5 (1080x1350)
+   - **Style:** Southeast Asian lifestyle photography, cinematic — ระบุ Southeast Asian หรือ Thai ใน prompt เสมอ ทั้ง subject (เช่น "young Thai woman", "Southeast Asian man") และ setting (เช่น "Bangkok rooftop", "Thai urban apartment", "tropical garden") เพื่อป้องกัน model default ไปหา Western aesthetic
 
 5. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
 6. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`

@@ -25,6 +25,9 @@ Input จาก script-agent:
    ```bash
    codex exec -s workspace-write "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png"
    ```
+   ก่อนรัน — ถ้า `image_prompt` มีคนหรือฉากชีวิต แต่ยังไม่มี ethnic/location marker ให้ inject เพิ่มก่อนส่ง codex:
+   - เพิ่ม `Southeast Asian [man/woman]` ถ้า prompt มีคนแต่ไม่ระบุ ethnicity
+   - เพิ่ม `contemporary Thailand setting` ถ้า prompt มี scene ในเมือง/บ้าน แต่ไม่ระบุ location
 2. ตรวจว่าไฟล์ถูกสร้างที่ `outputs/scheduled/[content_id]/image.png`
 3. ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/`
 4. คืน path กลับให้ agent ที่เรียก เพื่อ update `image_path` ใน content.json

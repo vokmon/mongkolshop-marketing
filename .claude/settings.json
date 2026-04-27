@@ -3,7 +3,13 @@
   "permissions": {
     "allow": [
       "Bash(curl *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(codex *)",
+      "Bash(mkdir *)",
+      "Bash(ls *)",
+      "Bash(rm -rf ~/.codex/generated_images/*)",
+      "Write(outputs/scheduled/**)",
+      "Edit(outputs/scheduled/**)"
     ]
   }
 }
