@@ -9,7 +9,9 @@
       "Bash(ls *)",
       "Bash(rm -rf *)",
       "Write(outputs/scheduled/**)",
-      "Edit(outputs/scheduled/**)"
+      "Edit(outputs/scheduled/**)",
+      "WebSearch(*)",
+      "WebFetch(*)"
     ]
   }
 }
