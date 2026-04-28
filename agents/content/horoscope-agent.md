@@ -8,6 +8,8 @@
 
 ## อ่านก่อนเริ่ม
 
+ถ้าเรียกจาก `pipelines/batch-editorial.md` — ข้ามการไฟล์เริ่มต้นส่วนนี้ทั้งหมด ไฟล์เหล่านี้โหลดใน Phase 0 แล้ว
+
 1. `config.md` — LINE OA handle
 2. `products/mongkol_art/brief.md` — product CTA wording
 3. `skills/content-schedule.md` — slot time สำหรับคำนวณ `scheduled_publish_time`
@@ -94,7 +96,7 @@
 4. เขียน caption ตาม format:
 
 ```
-[hook บรรทัด 1]
+[emoji][hook บรรทัด 1]
 [hook บรรทัด 2] 👇
 
 ━━━━━━━━━━━━━━━
