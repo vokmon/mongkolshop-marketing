@@ -21,6 +21,12 @@ Input จาก script-agent:
 
 ## Process — Single Image
 
+0. ตรวจสอบว่ามี codex ในเครื่องก่อน:
+   ```bash
+   which codex
+   ```
+   ถ้าไม่มี — หยุดทันที แจ้ง user ว่า "image generation ต้องการ codex — ไม่สามารถสร้างรูปได้" อย่า saveContent() ด้วย image_path ว่าง
+
 1. Generate รูปด้วย Codex:
    ```bash
    codex exec -s workspace-write "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png"
