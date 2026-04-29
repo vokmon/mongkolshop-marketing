@@ -19,7 +19,7 @@
 
 ทำครบในรอบเดียว ไม่รอ approve ระหว่างขั้นตอน:
 
-1. เรียก tracker-agent `scan({ fields: ['content_format', 'visual_style'], limit: 5 })` เพื่อดู format และ visual style ที่ใช้ล่าสุด
+1. อ่าน `outputs/recent-log.json` กรอง `content_type = "product"` — ดู `content_format` และ `visual_style` ของ 5 entries ล่าสุด
 2. เลือก `content_format` ให้หลากหลาย — หลีกเลี่ยง format เดิมที่ใช้ติดต่อกัน:
    - **image** — angle ที่เป็น single powerful visual
    - **video** — angle ที่เป็นเรื่องราว (before/after, journey, สาธิต)

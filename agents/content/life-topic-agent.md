@@ -22,8 +22,6 @@
 
 ## อ่านก่อนเริ่ม
 
-ถ้าเรียกจาก `pipelines/batch-editorial.md` — ข้ามการไฟล์เริ่มต้นส่วนนี้ทั้งหมด ไฟล์เหล่านี้โหลดใน Phase 0 แล้ว
-
 1. `config.md` — LINE OA handle
 2. `skills/mongkolart-brand.md` — brand voice
 3. `skills/content-schedule.md` — slot time สำหรับคำนวณ `scheduled_publish_time`
@@ -40,17 +38,22 @@
 
 ## Process
 
-> **งานนี้ยังไม่เสร็จจนกว่าจะมีรูป** — ขั้นตอน 5-6 บังคับทุกครั้ง ห้าม saveContent() ด้วย image_path ว่าง
+> **งานนี้ยังไม่เสร็จจนกว่าจะมีรูป** — ขั้นตอน 6-7 บังคับทุกครั้ง ห้าม saveContent() ด้วย image_path ว่าง
 
-1. เลือก angle ที่ทำให้คน relate — เริ่มจากความรู้สึก ประสบการณ์ หรือเรื่องราวที่คนเจอจริงในชีวิต
+1. ตรวจ duplicate — อ่าน `outputs/recent-log.json` กรอง `content_type = "life_topic"` ใน 7 วันที่ผ่านมา:
+   - หลีกเลี่ยง `topic_type` ที่ใช้ไปแล้วในช่วงนั้น
+   - หลีกเลี่ยง `deity` เดิมถ้าปรากฏ 2 ครั้งขึ้นไปใน 7 วัน
+   - ถ้าทุก `topic_type` ถูกใช้ไปหมดแล้ว — เลือก topic_type ที่เก่าที่สุดในช่วงนั้นได้
 
-2. เขียน content ใน **4 ส่วน**:
+2. เลือก angle ที่ทำให้คน relate — เริ่มจากความรู้สึก ประสบการณ์ หรือเรื่องราวที่คนเจอจริงในชีวิต
+
+3. เขียน content ใน **4 ส่วน**:
    - **Greeting (เบาๆ)** — 1 ประโยคทักทายหรือตั้งบริบทวันนั้น ให้รู้สึกเหมือนมีคนเริ่มคุยด้วย ไม่ใช่บทความ — เขียนใหม่ทุก post ให้เข้ากับ topic และบริบทนั้นๆ ไม่จำกัด wording ตัวอย่างเช่น "วันพฤหัสแบบนี้...", "ช่วงนี้หลายคนถามเรื่องนี้กัน", "เพิ่งคุยกับเพื่อนเรื่องนี้มา..." — ห้ามใช้ซ้ำแบบเดิมทุก post
    - **Hook** — ประโยคที่ทำให้คนหยุด เป็นคำถาม สถานการณ์ที่ relate หรือข้อเท็จจริงที่น่าสนใจ
    - **เนื้อหาหลัก** — สาระ ความรู้ หรือมุมมองที่น่าสนใจเกี่ยวกับ topic นั้นจริงๆ อาจเป็นเคล็ดลับ ข้อเท็จจริง เรื่องเล่า หรือ perspective ใหม่ที่คนอ่านแล้วรู้สึกได้อะไรกลับไปแม้ไม่ซื้ออะไรเลย **ห้ามออกแบบเนื้อหาหลักให้เป็น "setup" นำไปหาเทพหรือสินค้า** — content ต้องมีคุณค่าในตัวเอง
    - **Bridge + CTA (เนียน)** — 1-2 ประโยคท้ายสุด เชื่อมเข้าสินค้าแบบธรรมชาติ เหมือน "by the way" ไม่ใช่บทสรุป ไม่ต้องอธิบายว่าทำไม — แค่วางไว้ให้คนที่สนใจต่อเองได้
 
-3. เลือกเทพสำหรับรูปและ bridge (ไม่จำเป็นต้องอยู่ในเนื้อหาหลัก):
+4. เลือกเทพสำหรับรูปและ bridge (ไม่จำเป็นต้องอยู่ในเนื้อหาหลัก):
    - love/relationship → พระศุกร์, เจ้าแม่กวนอิม
    - career/obstacle → พระพิฆเนศ
    - wealth/abundance → พระแม่ลักษมี, พระพิฆเนศ, เจ้าแม่กวนอิม
@@ -60,7 +63,7 @@
    - home/energy → เทพประจำบ้าน
    - _(เลือกตามความเหมาะสม)_
 
-4. สร้าง image prompt:
+5. สร้าง image prompt:
    - **ไม่ใช่รูปเทพ** — เป็น lifestyle/storytelling scene ที่สื่อถึงเนื้อหาของ post โดยตรง
    - อาจมีคนประกอบ เพื่อให้ relate และดึงดูดกว่า
    - ตัวอย่างตาม topic (ไม่จำกัดเฉพาะรายการนี้ — สร้าง scene ใหม่ได้ตาม angle ของ post นั้น):
@@ -74,8 +77,8 @@
    - ห้ามมีตัวอักษรในรูป, format 4:5 (1080x1350)
    - **Style:** Southeast Asian lifestyle photography, cinematic — ระบุ Southeast Asian หรือ Thai ใน prompt เสมอ ทั้ง subject (เช่น "young Thai woman", "Southeast Asian man") และ setting (เช่น "Bangkok rooftop", "Thai urban apartment", "tropical garden") เพื่อป้องกัน model default ไปหา Western aesthetic
 
-5. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
-6. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`
+6. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
+7. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`
    **งานเสร็จเมื่อได้ทั้ง caption และ image_path ที่ไม่ว่าง — ห้าม saveContent() ก่อนมีรูป**
 
 ## Bridge Style

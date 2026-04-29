@@ -25,8 +25,6 @@
 
 ## อ่านก่อนเริ่ม
 
-ถ้าเรียกจาก `pipelines/batch-editorial.md` — ข้ามการไฟล์เริ่มต้นส่วนนี้ทั้งหมด ไฟล์เหล่านี้โหลดใน Phase 0 แล้ว
-
 1. `config.md` — LINE OA handle
 2. `skills/mongkolart-brand.md` — brand voice
 3. `skills/content-schedule.md` — slot time สำหรับคำนวณ `scheduled_publish_time`
@@ -43,23 +41,20 @@
 
 ## Process
 
-> **งานนี้ยังไม่เสร็จจนกว่าจะมีรูป** — ขั้นตอน 5-6 บังคับทุกครั้ง ห้าม saveContent() ด้วย image_path ว่าง
+> **งานนี้ยังไม่เสร็จจนกว่าจะมีรูป** — ขั้นตอน 6-7 บังคับทุกครั้ง ห้าม saveContent() ด้วย image_path ว่าง
 
-1. ทำความเข้าใจ topic และ angle ที่ต้องการ
-2. ค้นหาข้อมูลที่ถูกต้องและน่าเชื่อถือ — ตรวจสอบ tool ก่อน แล้ว **รอผลลัพธ์ก่อนเสมอ** ห้ามเขียน content จนกว่าจะอ่านผลครบ:
+1. ตรวจ duplicate — อ่าน `outputs/recent-log.json` กรอง story variants (`content_type` ≠ `life_topic`, `horoscope_daily`, `news`, `product`) ใน 14 วันที่ผ่านมา:
+   - หลีกเลี่ยง `deity` + `content_type` combination เดิมที่เพิ่งใช้ไป
+   - หลีกเลี่ยง `topic` (angle) ที่ใกล้เคียงกันเกินไปกับที่มีอยู่
+   - เทพองค์เดิมสร้างได้หลาย post แต่ต้องคนละ `content_type` หรือคนละ angle ชัดเจน
 
-   ```bash
-   which gemini
-   ```
+2. ทำความเข้าใจ topic และ angle ที่ต้องการ
 
-   - **ถ้ามี gemini**: รัน gemini แล้วรอผล:
-     ```bash
-     gemini -p "ค้นหาข้อมูล [topic] เกี่ยวกับ [deity/legend/topic]: ประวัติ ความเป็นมา ตำนาน ความหมาย รายละเอียดที่ถูกต้องตามหลักศาสนาและวัฒนธรรมไทย/อินเดีย/จีน"
-     ```
-   - **ถ้าไม่มี gemini**: ใช้ WebSearch + WebFetch แทน — ค้นหาหลายแหล่งแล้วรวมข้อมูล
-     → อ่านผลลัพธ์ครบ ตรวจความถูกต้อง แล้วถึงเริ่มเขียน
+3. ค้นหาข้อมูลที่ถูกต้องและน่าเชื่อถือ — ใช้ WebSearch + WebFetch **รอผลลัพธ์ก่อนเสมอ** ห้ามเขียน content จนกว่าจะอ่านผลครบ:
+   - ค้นหาหลายแหล่งแล้วรวมข้อมูล — query เช่น "[deity/topic] ประวัติ ตำนาน ความหมาย"
+   - อ่านผลลัพธ์ครบ ตรวจความถูกต้อง แล้วถึงเริ่มเขียน
 
-3. เขียน content:
+4. เขียน content:
    - **เกริ่นนำสั้นๆ** — 1-2 ประโยคทักทายหรือตั้งบริบทก่อนเข้าเรื่อง เหมือนคนเล่าเรื่องที่กำลังจะบอกอะไรบางอย่างกับเพื่อน ไม่ต้องยาว ไม่ต้องเป็นทางการ แค่ให้รู้สึกว่ามีคนเล่าให้ฟัง ไม่ใช่บทความ
    - **Hook** — ประโยคแรกต้องดึงคนให้อยากอ่านต่อ
    - **เนื้อหา** — เล่าเรื่องให้ครบถ้วน น่าสนใจ เข้าใจง่าย
@@ -67,7 +62,7 @@
      - เป้าหมาย: คนที่ไม่รู้เรื่องเทพก็อ่านแล้วเข้าใจและรู้สึก relate
      - ใช้ภาษาพูด เป็นกันเอง ไม่ใช้ศัพท์วิชาการมากเกินไป
    - **Bridge** — ปิดด้วยการเชื่อม content กับ product แบบ soft และ organic
-4. สร้าง image prompt ตาม topic:
+5. สร้าง image prompt ตาม topic:
 
 **หลักการสำคัญ: รูปต้องเล่าเรื่อง ไม่ใช่แค่ portrait เทพ**
 
@@ -88,8 +83,8 @@
 - ห้ามมีตัวอักษรในรูป — ระบุ "no text" ทุกครั้ง
 - ใช้ Art Style ตาม topic type จากตารางด้านบน — **ห้ามใช้ "painterly illustration style, highly detailed"** เพราะดึง model ไปหา Western realism
 
-5. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
-6. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`
+6. เรียก `agents/creative/image-gen-agent` (single image mode) — ส่ง `image_prompt` และ `content_id`
+7. รับ path กลับมา → update `image_path` ใน content.json → เรียก tracker-agent `saveContent()`
    **งานเสร็จเมื่อได้ทั้ง caption และ image_path ที่ไม่ว่าง — ห้าม saveContent() ก่อนมีรูป**
 
 ## Tone — เขียนให้ดูเป็นมนุษย์มีความเป็นธรรมชาติ ไม่ใช่ AI
@@ -149,4 +144,4 @@
   - `deity_history`, `deity_virtue`, `legend`, `jataka` — **400-550 คำ** เรื่องเล่าต้องมีพื้นที่พอให้เรื่องพัฒนาและ land ก่อนจบ ห้ามรวบรัดจนเรื่องไม่สมบูรณ์
   - topic อื่น — **250-350 คำ** พอสมควร ไม่สั้นไม่ยาวเกินไป
 - hashtag 4-6 อัน — เลือกให้ตรงกับ topic ไม่ใช่แค่ hashtag product
-- เทพองค์เดิมสร้างได้หลาย post แต่ต้องคนละ angle — เรียก tracker-agent scan() ตรวจก่อนเสมอ
+- เทพองค์เดิมสร้างได้หลาย post แต่ต้องคนละ angle — ดูจาก `outputs/recent-log.json` (ขั้นตอน 1)

@@ -6,12 +6,13 @@ Read **README.md** for full project documentation, goals, and conventions.
 
 **CLI Tools — ตรวจสอบก่อนใช้งานทุกครั้ง:**
 
-ก่อนเรียกใช้ `gemini` หรือ `codex` ให้ตรวจสอบว่ามีในเครื่องก่อนด้วย `which [tool]`
+ก่อนเรียกใช้ `codex` ให้ตรวจสอบว่ามีในเครื่องก่อนด้วย `which codex`
 
-| Tool     | ถ้าไม่มี                                           | Fallback                         |
-| -------- | -------------------------------------------------- | -------------------------------- |
-| `gemini` | ใช้ WebSearch + WebFetch แทน                       | ผลลัพธ์อาจน้อยกว่าแต่ยังทำต่อได้ |
-| `codex`  | แจ้ง user และหยุด — image generation ต้องการ codex | ไม่มี fallback สำหรับรูป         |
+| Tool    | ถ้าไม่มี                                           | Fallback                 |
+| ------- | -------------------------------------------------- | ------------------------ |
+| `codex` | แจ้ง user และหยุด — image generation ต้องการ codex | ไม่มี fallback สำหรับรูป |
+
+> ใช้ WebSearch + WebFetch สำหรับค้นหาข้อมูลทั้งหมด
 
 ---
 

@@ -25,7 +25,10 @@ DAYS = N
 - `agents/creative/image-gen-agent.md`
 - `agents/utils/tracker-agent.md`
 
-จากนั้น tracker-agent `scan({ days_back: 14, fields: ["deity","content_type","topic"] })` ครั้งเดียว
+จากนั้นอ่าน `outputs/recent-log.json` ครั้งเดียว — ใช้แทน scan() ทั้งหมด
+ผลลัพธ์นี้ใช้ตลอด run สำหรับตรวจ duplicate ใน Phase 1
+
+> ไฟล์ทั้งหมดในรายการนี้โหลดแล้ว — section "อ่านก่อนเริ่ม" ของทุก agent ใน Phase 2 ไม่ต้องทำซ้ำ
 
 ---
 
@@ -48,6 +51,11 @@ for i in range(DAYS):
 ```
 
 ผลลัพธ์ = ตาราง plan ครบทุก content_id, topic, timestamp — ใช้ตลอด run
+
+วาง plan โดยใช้ข้อมูลจาก `recent-log.json` (Phase 0) เพื่อหลีกเลี่ยง:
+- `life_topic` ที่มี `topic_type` เดิมซ้ำใน 7 วัน
+- story variants ที่มี `deity` + `content_type` เดิมซ้ำใน 14 วัน
+- `deity` เดิมปรากฏมากกว่า 2 ครั้งใน 7 วัน (ทุก content_type รวมกัน)
 
 ---
 

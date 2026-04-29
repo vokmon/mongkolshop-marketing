@@ -25,4 +25,4 @@ tracker-agent `updateStatus(content_id, 'approved')` ทุก content ที่
 
 ## Step 3 — Publish
 
-ทำตาม `agents/channels/post-agent.md`
+ทำตาม `agents/channels/post-agent.md` — ส่ง `content_ids` จาก Step 1 โดยตรง (ข้าม scan)

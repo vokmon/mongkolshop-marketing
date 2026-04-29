@@ -12,5 +12,8 @@
 
 ## Process
 
-1. เรียก tracker-agent `scan({ status: 'approved' })` → อ่าน active channels จาก `config.md` แล้วเรียก tracker-agent `updateChannelStatus(content_id, [channel], 'pending')` ทุก channel
-2. เรียก channel agents ที่ active (facebook-agent, ig-agent ฯลฯ) ให้แต่ละตัวจัดการ content ที่ `channel_status.[channel] = 'pending'` ของตัวเอง
+1. หา content ที่ต้อง post:
+   - **ถ้ามี `content_ids` ส่งมา** — ใช้ list นั้นเลย ข้าม scan
+   - **ถ้าไม่มี** — เรียก tracker-agent `scan({ status: 'approved' })` เพื่อดึง content ที่รอ post
+2. อ่าน active channels จาก `config.md` แล้วเรียก tracker-agent `updateChannelStatus(content_id, [channel], 'pending')` ทุก channel
+3. เรียก channel agents ที่ active (facebook-agent, ig-agent ฯลฯ) ให้แต่ละตัวจัดการ content ที่ `channel_status.[channel] = 'pending'` ของตัวเอง

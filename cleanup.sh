@@ -1,5 +1,5 @@
 #!/bin/bash
-# Delete old files in outputs/ and Codex temp sessions.
+# Clean outputs/scheduled, Codex sessions, and prune recent-log.json.
 # Skips outputs/audio/ — shared template assets.
 
 set -euo pipefail
@@ -15,23 +15,26 @@ usage() {
   cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Delete files older than N days from outputs/ and optionally Codex temp sessions.
+- outputs/scheduled  — delete all files (always)
+- AI sessions        — delete all files when -s is passed (Codex)
+- recent-log.json    — prune entries older than N days (default: 30)
+
 Skips outputs/audio/ (shared template assets).
 
 Options:
-  -d, --days N      Delete files older than N days (default: 30)
+  -d, --days N      Keep recent-log.json entries newer than N days (default: 30)
   -n, --dry-run     Show what would be deleted without deleting
-  -s, --sessions    Also clean Codex temp sessions/images (generated_images,
-                    sessions, archived_sessions, tmp, shell_snapshots)
+  -s, --sessions    Also clean Codex sessions:
+                      generated_images, sessions, archived_sessions,
+                      tmp, shell_snapshots
   --sessions-only   Clean only Codex sessions, skip outputs/
   -h, --help        Show this help
 
 Examples:
-  $(basename "$0")                    # clean outputs/ older than 30 days
-  $(basename "$0") -d 7               # clean outputs/ older than 7 days
-  $(basename "$0") -s                 # clean outputs/ + Codex sessions
-  $(basename "$0") --sessions-only    # clean only Codex sessions
-  $(basename "$0") -d 7 -s -n        # preview both cleanups
+  $(basename "$0")               # clean scheduled + prune log older than 30 days
+  $(basename "$0") -d 7          # same but keep only last 7 days in log
+  $(basename "$0") -s            # also wipe Codex sessions
+  $(basename "$0") --sessions-only -n  # preview AI session cleanup only
 EOF
 }
 
@@ -59,12 +62,9 @@ done
 DELETED=0
 FREED=0
 
-delete_old_files() {
+delete_all_files() {
   local dir="$1"
   [[ -d "$dir" ]] || return 0
-
-  local find_args=(-type f)
-  (( DAYS > 0 )) && find_args+=(-mtime +"$DAYS")
 
   while IFS= read -r -d '' file; do
     local size
@@ -77,7 +77,7 @@ delete_old_files() {
     fi
     (( DELETED++ )) || true
     (( FREED += size )) || true
-  done < <(find "$dir" "${find_args[@]}" -print0)
+  done < <(find "$dir" -type f -print0)
 }
 
 remove_empty_dirs() {
@@ -104,30 +104,59 @@ print_summary() {
 
 # --- outputs/ cleanup ---
 if $CLEAN_OUTPUTS; then
-  echo "Cleaning outputs/ — files older than ${DAYS} day(s)${DRY_RUN:+ [DRY RUN]}"
+  echo "Cleaning outputs/${DRY_RUN:+ [DRY RUN]}"
   echo ""
+
   dir="$OUTPUTS/scheduled"
   if [[ -d "$dir" ]]; then
-    echo "[scheduled]"
-    delete_old_files "$dir"
+    echo "[scheduled] — delete all"
+    delete_all_files "$dir"
     $DRY_RUN || remove_empty_dirs "$dir"
   fi
+
+  log="$OUTPUTS/recent-log.json"
+  if [[ -f "$log" ]]; then
+    echo ""
+    echo "[recent-log.json] — prune entries older than ${DAYS} day(s)"
+    if $DRY_RUN; then
+      node -e "
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync('$log'));
+const cutoff = new Date(Date.now() - ${DAYS} * 864e5).toISOString().slice(0,10);
+const old = (data.entries || []).filter(e => (e.date || '9999') < cutoff);
+console.log('  [dry-run] would prune ' + old.length + ' entries older than ${DAYS} day(s)');
+"
+    else
+      node -e "
+const fs = require('fs');
+const data = JSON.parse(fs.readFileSync('$log'));
+const cutoff = new Date(Date.now() - ${DAYS} * 864e5).toISOString().slice(0,10);
+const before = (data.entries || []).length;
+data.entries = (data.entries || []).filter(e => (e.date || '9999') >= cutoff);
+data.last_updated = new Date().toISOString();
+fs.writeFileSync('$log', JSON.stringify(data, null, 2));
+console.log('  pruned ' + (before - data.entries.length) + ' entries (' + data.entries.length + ' remaining)');
+"
+    fi
+  fi
+
   echo ""
 fi
 
 # --- Codex sessions cleanup ---
 if $CLEAN_SESSIONS; then
   CODEX_DIR="$HOME/.codex"
-  echo "Cleaning Codex sessions — files older than ${DAYS} day(s)${DRY_RUN:+ [DRY RUN]}"
+  echo "Cleaning Codex sessions — delete all${DRY_RUN:+ [DRY RUN]}"
   echo ""
   for target in generated_images sessions archived_sessions tmp shell_snapshots; do
     dir="$CODEX_DIR/$target"
     [[ -d "$dir" ]] || continue
     echo "[codex/$target]"
-    delete_old_files "$dir"
+    delete_all_files "$dir"
     $DRY_RUN || remove_empty_dirs "$dir"
   done
   echo ""
 fi
+
 
 print_summary

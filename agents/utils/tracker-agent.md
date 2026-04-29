@@ -16,7 +16,38 @@ outputs/scheduled/
     ├── image.png       ← image post (ถ้ามี)
     ├── video.mp4       ← video post (ถ้ามี)
     └── scenes/         ← video scene images (ถ้ามี)
+
+outputs/recent-log.json ← compact index สำหรับ dedup (auto-maintained)
 ```
+
+### recent-log.json
+
+ไฟล์ compact ที่เก็บเฉพาะ field ที่ใช้ตรวจ duplicate — อ่านไฟล์เดียวแทนการ scan ทุก folder
+
+```json
+{
+  "last_updated": "2026-04-29T07:00:00+07:00",
+  "note": "auto-maintained by tracker-agent on every saveContent() — last 30 days only",
+  "entries": [
+    {
+      "content_id": "life_wealth_20260429",
+      "content_type": "life_topic",
+      "date": "2026-04-29",
+      "topic_type": "wealth",
+      "deity": "พระแม่ลักษมี"
+    }
+  ]
+}
+```
+
+Fields ที่เขียนต่อ entry (เฉพาะที่มีค่า — ข้ามถ้า null/empty):
+
+| content_type | fields |
+|---|---|
+| `life_topic` | `content_id`, `content_type`, `date`, `topic_type`, `deity` |
+| story variants (`deity_*`, `legend`, `jataka`, `amulet`, `astrology_science`, `festival`, `occult`) | `content_id`, `content_type`, `date`, `topic`, `deity` |
+| `product` | `content_id`, `content_type`, `date`, `deity`, `topic`, `angle`, `content_format`, `visual_style` |
+| `horoscope_daily`, `news` | ไม่เขียน — ไม่มี dedup |
 
 ## Operations
 
@@ -24,6 +55,15 @@ outputs/scheduled/
 สร้าง folder `outputs/scheduled/[content_id]/` และบันทึก `content.json`
 ตั้ง `created_at` เป็น current datetime (ISO 8601, +07:00) อัตโนมัติ — ไม่ต้องรับจาก caller
 Return: `content_id`
+
+หลัง saveContent() สำเร็จ — อัปเดต `outputs/recent-log.json` อัตโนมัติ:
+1. อ่านไฟล์ปัจจุบัน (สร้างใหม่ถ้ายังไม่มี)
+2. เพิ่ม entry ใหม่ตาม field mapping ในตาราง Storage ด้านบน — **ข้าม content_type ต่อไปนี้:**
+   - `horoscope_daily`
+   - `news`
+3. ลบ entries ที่ `date` เก่ากว่า 30 วัน
+4. อัปเดต `last_updated` เป็น current datetime
+5. เขียนกลับ
 
 ### updateStatus(content_id, status)
 อัปเดต field `status` ใน `content.json` — ไม่ย้าย folder
