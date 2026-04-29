@@ -88,7 +88,7 @@ outputs/
 
 ```bash
 claude -p "<task>"
-codex exec -s workspace-write "<task>"
+echo "<task>" | codex exec
 ```
 
 | Task                                   | Tool                                       |
@@ -100,7 +100,7 @@ codex exec -s workspace-write "<task>"
 
 ### Image Generation Convention
 
-- รัน `codex exec -s workspace-write` โดยตรง
+- รัน `echo "..." | codex exec` โดยตรง
 - บันทึกลง `outputs/scheduled/[content_id]/`
 - ลบไฟล์ต้นฉบับจาก `~/.codex/generated_images/` หลัง save เสร็จ
 

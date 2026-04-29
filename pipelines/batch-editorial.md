@@ -73,14 +73,14 @@ for i in range(DAYS):
 
 ```bash
 # ชุดที่ 1 (สูงสุด 4)
-codex exec -s workspace-write "..." &
-codex exec -s workspace-write "..." &
-codex exec -s workspace-write "..." &
-codex exec -s workspace-write "..." &
+echo "..." | codex exec &
+echo "..." | codex exec &
+echo "..." | codex exec &
+echo "..." | codex exec &
 wait
 
 # ชุดที่ 2 (ถ้ามี)
-codex exec -s workspace-write "..." &
+echo "..." | codex exec &
 ...
 wait
 ```

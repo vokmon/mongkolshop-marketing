@@ -29,7 +29,7 @@ Input จาก script-agent:
 
 1. Generate รูปด้วย Codex:
    ```bash
-   codex exec -s workspace-write "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png"
+   echo "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png" | codex exec
    ```
    ก่อนรัน — ถ้า `image_prompt` มีคนหรือฉากชีวิต แต่ยังไม่มี ethnic/location marker ให้ inject เพิ่มก่อนส่ง codex:
    - เพิ่ม `Southeast Asian [man/woman]` ถ้า prompt มีคนแต่ไม่ระบุ ethnicity
@@ -45,7 +45,7 @@ Input จาก script-agent:
 1. อ่าน `products/[product_id]/image-gen-agent.md` — ทำตาม instructions ของ product นั้นทุกอย่าง
 2. Generate scene_01 ก่อนเสมอ:
    ```bash
-   codex exec -s workspace-write "Generate an image: [SCENE_01_PROMPT], [VISUAL_DNA], no text, high quality. Save to outputs/scheduled/[content_id]/scenes/scene_01.png"
+   echo "Generate an image: [SCENE_01_PROMPT], [VISUAL_DNA], no text, high quality. Save to outputs/scheduled/[content_id]/scenes/scene_01.png" | codex exec
    ```
 3. Generate scene ถัดไปตาม product instructions — ส่ง reference images ตามที่ product กำหนด
 4. ตรวจว่าไฟล์ถูกสร้างครบทุก scene
