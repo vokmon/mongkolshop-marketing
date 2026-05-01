@@ -37,11 +37,14 @@ Phase 1: Research → [Human เลือก idea] → Phase 2: Creative → [Hu
 | ---------------------------------- | ------------------------------------ |
 | สร้าง content ใหม่ (ทั้ง pipeline) | `agents/main-agent.md`               |
 | Research + script เท่านั้น         | `agents/product/research-agent.md`   |
+| สร้างโพสต์เกมทายคำ/ทายภาพ         | `agents/content/game-agent.md`       |
 | สร้างรูป                           | `agents/creative/image-gen-agent.md` |
 | สร้าง video                        | `agents/creative/video-agent.md`     |
 | สร้าง thumbnail                    | `agents/creative/asset-agent.md`     |
 | Publish ไป Facebook                | `agents/channels/facebook-agent.md`  |
 | ดู / อัพเดท database               | `agents/utils/tracker-agent.md`      |
+
+หมายเหตุ: editorial content ควรมี micro-engagement ตั้งแต่ขั้นเขียนของ content agents หลัก (hook + comment trigger + CTA + hashtag 3-5) โดยไม่ต้องเรียก optimizer เพิ่มใน pipeline ปกติ
 
 ---
 
@@ -54,6 +57,7 @@ agents/
 │   ├── horoscope-agent.md     # ดวงวันนี้
 │   ├── story-agent.md         # เรื่องเทพ / ตำนาน
 │   ├── life-topic-agent.md    # life topics
+│   ├── game-agent.md          # เกมทายคำ/ทายภาพ
 │   └── news-agent.md          # ข่าว (daily cron)
 ├── product/
 │   ├── research-agent.md      # web search — trends + angles

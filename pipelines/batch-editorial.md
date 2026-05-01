@@ -22,6 +22,7 @@ DAYS = N
 - `agents/content/horoscope-agent.md`
 - `agents/content/story-agent.md`
 - `agents/content/life-topic-agent.md`
+- `agents/content/game-agent.md`
 - `agents/creative/image-gen-agent.md`
 - `agents/utils/tracker-agent.md`
 
@@ -46,7 +47,8 @@ for i in range(DAYS):
     print(d, d.strftime('%A'),
         int(datetime.datetime(d.year,d.month,d.day,7,0,tzinfo=tz).timestamp()),
         int(datetime.datetime(d.year,d.month,d.day,12,0,tzinfo=tz).timestamp()),
-        int(datetime.datetime(d.year,d.month,d.day,19,0,tzinfo=tz).timestamp()))
+        int(datetime.datetime(d.year,d.month,d.day,19,0,tzinfo=tz).timestamp()),
+        int(datetime.datetime(d.year,d.month,d.day,20,30,tzinfo=tz).timestamp()))
 "
 ```
 
@@ -56,6 +58,7 @@ for i in range(DAYS):
 - `life_topic` ที่มี `topic_type` เดิมซ้ำใน 7 วัน
 - story variants ที่มี `deity` + `content_type` เดิมซ้ำใน 14 วัน
 - `deity` เดิมปรากฏมากกว่า 2 ครั้งใน 7 วัน (ทุก content_type รวมกัน)
+- เกม (`content_type = game_interaction`) ที่มี `answer` ซ้ำใน 30 วัน
 
 ---
 
@@ -64,6 +67,11 @@ for i in range(DAYS):
 เขียน caption + image_prompt ทุกชิ้นต่อเนื่องกัน **ยังไม่ gen รูป**
 
 ใช้ agent ตาม slot ที่ระบุใน `content-schedule.md` — ทำตาม Process ของแต่ละ agent (อ่านแล้วใน Phase 0) **เฉพาะขั้นตอนเขียน caption + image_prompt เท่านั้น ข้าม image gen และ saveContent**
+
+เรียก `game-agent` ทุกวันสำหรับ Slot 5 (20:30) โดยให้ agent เลือกแบบ controlled random:
+- สุ่ม mode จาก 2 แบบ (`emoji_guess`, `syllable_hint_guess`) และห้ามซ้ำ mode จากวันก่อน
+- สุ่ม difficulty แบบมีน้ำหนัก (easy 60% / medium 30% / hard 10%)
+- answer ต้องไม่ซ้ำย้อนหลัง 30 วัน
 
 ---
 

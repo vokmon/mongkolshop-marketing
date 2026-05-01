@@ -140,8 +140,12 @@
 
 ## กฎ Content
 
+- Micro-engagement baseline (อ้างอิง `skills/content-schedule.md`) ต้องมีในทุกโพสต์:
+  - comment trigger สั้นๆ 1 จุดท้ายโพสต์
+  - CTA เดียวชัดๆ 1 จุด
+  - hashtag 3-5 อัน
 - Caption ความยาว:
   - `deity_history`, `deity_virtue`, `legend`, `jataka` — **400-550 คำ** เรื่องเล่าต้องมีพื้นที่พอให้เรื่องพัฒนาและ land ก่อนจบ ห้ามรวบรัดจนเรื่องไม่สมบูรณ์
   - topic อื่น — **250-350 คำ** พอสมควร ไม่สั้นไม่ยาวเกินไป
-- hashtag 4-6 อัน — เลือกให้ตรงกับ topic ไม่ใช่แค่ hashtag product
+- hashtag 3-5 อัน — เลือกให้ตรงกับ topic ไม่ใช่แค่ hashtag product
 - เทพองค์เดิมสร้างได้หลาย post แต่ต้องคนละ angle — ดูจาก `outputs/recent-log.json` (ขั้นตอน 1)
