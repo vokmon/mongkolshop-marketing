@@ -31,6 +31,7 @@ Input จาก script-agent:
    ```bash
    echo "Generate an image: [image_prompt], 4:5 aspect ratio 1080x1350px, no text, high quality. Save to outputs/scheduled/[content_id]/image.png" | codex exec
    ```
+   - ใช้ command เดียวต่อ 1 `content_id` ตาม template ข้างต้น
    ก่อนรัน — ถ้า `image_prompt` มีคนหรือฉากชีวิต แต่ยังไม่มี ethnic/location marker ให้ inject เพิ่มก่อนส่ง codex:
    - เพิ่ม `Southeast Asian [man/woman]` ถ้า prompt มีคนแต่ไม่ระบุ ethnicity
    - เพิ่ม `contemporary Thailand setting` ถ้า prompt มี scene ในเมือง/บ้าน แต่ไม่ระบุ location
@@ -41,6 +42,8 @@ Input จาก script-agent:
 ---
 
 ## Process — Multi-scene
+
+> ใช้กับงาน video/multi-scene เท่านั้น
 
 1. อ่าน `products/[product_id]/image-gen-agent.md` — ทำตาม instructions ของ product นั้นทุกอย่าง
 2. Generate scene_01 ก่อนเสมอ:
